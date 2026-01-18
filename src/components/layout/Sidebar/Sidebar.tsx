@@ -261,7 +261,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
         >
           <UserIcon 
             className="w-6 h-6" 
-            style={{ color: 'var(--gray-0)' }}
+            style={{ color: 'var(--gray-900)' }}
           />
         </div>
         {isExpanded && (

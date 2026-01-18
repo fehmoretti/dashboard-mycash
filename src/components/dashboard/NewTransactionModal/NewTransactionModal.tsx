@@ -246,6 +246,7 @@ const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
           className="flex-1 overflow-y-auto"
           style={{
             padding: 'var(--spacing-lg)',
+            position: 'relative',
           }}
         >
           <div
@@ -599,7 +600,7 @@ const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
               </div>
 
               {/* Select Conta/Cartão */}
-              <div>
+              <div style={{ position: 'relative', zIndex: 1 }}>
                 <label
                   style={{
                     fontSize: 'var(--font-size-body-sm)',
@@ -631,6 +632,11 @@ const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
                     borderColor: errors.accountId ? '#ef4444' : 'var(--color-border)',
                     borderRadius: 'var(--border-radius-input)',
                     cursor: 'pointer',
+                    WebkitAppearance: 'none',
+                    MozAppearance: 'none',
+                    appearance: 'none',
+                    position: 'relative',
+                    zIndex: 2,
                   }}
                 >
                   <option value="">Selecione uma conta ou cartão</option>

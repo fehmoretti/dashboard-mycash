@@ -147,11 +147,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                     flex items-center rounded-button
                     group relative
                     ${isExpanded ? 'w-full' : 'w-12 justify-center'}
-                    ${
-                      isActive
-                        ? 'bg-text-primary'
-                        : 'text-text-secondary hover:bg-gray-100'
-                    }
+                    ${!isActive ? 'hover:bg-gray-100' : ''}
                   `}
                   style={{
                     padding: 'var(--spacing-input-padding)',
@@ -160,14 +156,15 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                     transitionDuration: '200ms',
                     transitionTimingFunction: 'ease-in-out',
                     gap: 'var(--spacing-md)',
+                    backgroundColor: isActive 
+                      ? 'var(--color-primary)' 
+                      : 'transparent',
                   }}
                 >
                   <Icon
                     className="flex-shrink-0 w-6 h-6 transition-colors duration-200"
                     style={{
-                      color: isActive 
-                        ? 'var(--color-primary)' 
-                        : 'var(--color-text-secondary)',
+                      color: 'var(--color-text-primary)',
                     }}
                   />
                   {isExpanded && (
@@ -176,9 +173,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                       style={{
                         fontSize: 'var(--font-size-body-md)',
                         fontWeight: 'var(--font-weight-regular)',
-                        color: isActive 
-                          ? 'var(--color-background-primary)' 
-                          : 'var(--color-text-secondary)',
+                        color: 'var(--color-text-primary)',
                       }}
                     >
                       {item.label}

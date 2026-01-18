@@ -44,19 +44,24 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
 
   return (
     <aside
-      className={`
-        fixed left-0 top-0 h-screen z-40
-        bg-background-secondary
-        border-r border-border
-        transition-all duration-300 ease-in-out
-        flex flex-col
-        ${isExpanded ? 'w-64' : 'w-20'}
-      `}
+      className="fixed left-0 top-0 h-screen z-40 flex flex-col transition-all duration-300 ease-in-out"
+      style={{
+        width: isExpanded ? '16rem' : '5rem', // w-64 = 256px = 16rem, w-20 = 80px = 5rem
+        backgroundColor: 'var(--color-background-secondary)',
+        borderRightWidth: '1px',
+        borderRightStyle: 'solid',
+        borderRightColor: 'var(--color-border)',
+      }}
     >
       {/* Header com Logo */}
       <div 
-        className="flex items-center justify-between border-b border-border"
-        style={{ padding: 'var(--spacing-container-padding)' }}
+        className="flex items-center justify-between"
+        style={{ 
+          padding: 'var(--spacing-container-padding)',
+          borderBottomWidth: '1px',
+          borderBottomStyle: 'solid',
+          borderBottomColor: 'var(--color-border)',
+        }}
       >
         <div 
           className="flex items-center overflow-hidden"
@@ -75,11 +80,12 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
             </h1>
           ) : (
             <div 
-              className="bg-primary rounded-md flex items-center justify-center"
+              className="flex items-center justify-center"
               style={{ 
                 width: 'var(--spacing-xl)',
                 height: 'var(--spacing-xl)',
                 borderRadius: 'var(--border-radius-md)',
+                backgroundColor: 'var(--color-primary)',
               }}
             >
               <span 
@@ -100,27 +106,36 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
       {/* Botão Toggle - posicionado na borda direita */}
       <button
         onClick={toggle}
-        className={`
-          absolute -right-3 top-16
-          rounded-full
-          bg-background-primary border-2 border-border
-          flex items-center justify-center
-          hover:bg-gray-50
-          shadow-sm z-50
-        `}
+        className="absolute -right-3 top-16 flex items-center justify-center shadow-sm z-50"
         style={{
           width: 'var(--spacing-lg)',
           height: 'var(--spacing-lg)',
           borderRadius: 'var(--border-radius-full)',
+          backgroundColor: 'var(--color-background-primary)',
+          borderWidth: '2px',
+          borderStyle: 'solid',
+          borderColor: 'var(--color-border)',
           transitionProperty: 'background-color',
           transitionDuration: '200ms',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--gray-50)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'var(--color-background-primary)'
         }}
         aria-label={isExpanded ? 'Colapsar sidebar' : 'Expandir sidebar'}
       >
         {isExpanded ? (
-          <ChevronLeftIcon className="w-2 h-2 text-text-secondary" />
+          <ChevronLeftIcon 
+            className="w-2 h-2" 
+            style={{ color: 'var(--color-text-secondary)' }}
+          />
         ) : (
-          <ChevronRightIcon className="w-2 h-2 text-text-secondary" />
+          <ChevronRightIcon 
+            className="w-2 h-2" 
+            style={{ color: 'var(--color-text-secondary)' }}
+          />
         )}
       </button>
 
@@ -143,14 +158,19 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
               <div key={item.path} className="relative">
                 <NavLink
                   to={item.path}
-                  onMouseEnter={() => handleMouseEnter(item.path)}
-                  onMouseLeave={handleMouseLeave}
-                  className={`
-                    flex items-center rounded-button
-                    group relative
-                    ${isExpanded ? 'w-full' : 'w-12 justify-center'}
-                    ${!isActive ? 'hover:bg-gray-100' : ''}
-                  `}
+                  onMouseEnter={(e) => {
+                    handleMouseEnter(item.path)
+                    if (!isActive) {
+                      e.currentTarget.style.backgroundColor = 'var(--gray-100)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    handleMouseLeave()
+                    if (!isActive) {
+                      e.currentTarget.style.backgroundColor = 'transparent'
+                    }
+                  }}
+                  className="flex items-center group relative transition-all ease-in-out"
                   style={{
                     padding: 'var(--spacing-input-padding)',
                     borderRadius: 'var(--border-radius-button)',
@@ -158,6 +178,8 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                     transitionDuration: '200ms',
                     transitionTimingFunction: 'ease-in-out',
                     gap: 'var(--spacing-md)',
+                    width: isExpanded ? '100%' : '3rem', // w-12 = 48px = 3rem
+                    justifyContent: isExpanded ? 'flex-start' : 'center',
                     backgroundColor: isActive 
                       ? 'var(--color-primary)' 
                       : 'transparent',
@@ -219,18 +241,22 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
 
       {/* Perfil do Usuário */}
       <div
-        className={`border-t border-border ${isExpanded ? 'flex items-center' : 'flex flex-col items-center'}`}
+        className={`${isExpanded ? 'flex items-center' : 'flex flex-col items-center'}`}
         style={{
           padding: 'var(--spacing-container-padding)',
           gap: 'var(--spacing-md)',
+          borderTopWidth: '1px',
+          borderTopStyle: 'solid',
+          borderTopColor: 'var(--color-border)',
         }}
       >
         <div 
-          className="rounded-avatar bg-primary flex items-center justify-center flex-shrink-0"
+          className="flex items-center justify-center flex-shrink-0"
           style={{
             width: 'var(--spacing-xl)',
             height: 'var(--spacing-xl)',
             borderRadius: 'var(--border-radius-avatar)',
+            backgroundColor: 'var(--color-primary)',
           }}
         >
           <UserIcon 
@@ -251,9 +277,10 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
               Lucas Marte
             </p>
             <p 
-              className="text-text-secondary truncate"
+              className="truncate"
               style={{
                 fontSize: 'var(--font-size-body-sm)',
+                color: 'var(--color-text-secondary)',
               }}
             >
               lucasmarte@gmail.com

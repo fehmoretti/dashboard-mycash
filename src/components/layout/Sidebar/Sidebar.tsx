@@ -5,8 +5,6 @@ import { useSidebar } from '@/hooks/useSidebar'
 import { 
   HomeIcon, 
   CreditCardIcon, 
-  ChartBarIcon,
-  FlagIcon,
   UserIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -16,12 +14,10 @@ interface SidebarProps {
   currentPath: string
 }
 
+// Itens de navegação conforme design do Figma
 const navigationItems = [
   { path: ROUTES.DASHBOARD, label: 'Home', icon: HomeIcon },
   { path: ROUTES.CARDS, label: 'Cartões', icon: CreditCardIcon },
-  { path: ROUTES.TRANSACTIONS, label: 'Transações', icon: ChartBarIcon },
-  { path: ROUTES.GOALS, label: 'Objetivos', icon: FlagIcon },
-  { path: ROUTES.PROFILE, label: 'Perfil', icon: UserIcon },
 ]
 
 const Sidebar = ({ currentPath }: SidebarProps) => {

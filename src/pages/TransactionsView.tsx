@@ -318,14 +318,14 @@ const TransactionsView = () => {
             value={localTransactionType}
             onChange={(e) => setLocalTransactionType(e.target.value as 'all' | 'income' | 'expense')}
             style={{
-              padding: '12px 16px',
-              fontSize: 'var(--font-size-body-sm)',
+              padding: 'var(--spacing-input-padding)',
+              fontSize: 'var(--font-size-body-md)',
               color: 'var(--gray-900)',
               backgroundColor: 'var(--color-background-primary)',
               borderWidth: '1px',
               borderStyle: 'solid',
               borderColor: 'var(--color-border)',
-              borderRadius: '100px',
+              borderRadius: 'var(--border-radius-input)',
               outline: 'none',
               cursor: 'pointer',
             }}
@@ -340,14 +340,14 @@ const TransactionsView = () => {
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             style={{
-              padding: '12px 16px',
-              fontSize: 'var(--font-size-body-sm)',
+              padding: 'var(--spacing-input-padding)',
+              fontSize: 'var(--font-size-body-md)',
               color: 'var(--gray-900)',
               backgroundColor: 'var(--color-background-primary)',
               borderWidth: '1px',
               borderStyle: 'solid',
               borderColor: 'var(--color-border)',
-              borderRadius: '100px',
+              borderRadius: 'var(--border-radius-input)',
               outline: 'none',
               cursor: 'pointer',
             }}
@@ -365,14 +365,14 @@ const TransactionsView = () => {
             value={selectedAccount}
             onChange={(e) => setSelectedAccount(e.target.value)}
             style={{
-              padding: '12px 16px',
-              fontSize: 'var(--font-size-body-sm)',
+              padding: 'var(--spacing-input-padding)',
+              fontSize: 'var(--font-size-body-md)',
               color: 'var(--gray-900)',
               backgroundColor: 'var(--color-background-primary)',
               borderWidth: '1px',
               borderStyle: 'solid',
               borderColor: 'var(--color-border)',
-              borderRadius: '100px',
+              borderRadius: 'var(--border-radius-input)',
               outline: 'none',
               cursor: 'pointer',
             }}
@@ -390,14 +390,14 @@ const TransactionsView = () => {
             value={selectedMember}
             onChange={(e) => setSelectedMember(e.target.value)}
             style={{
-              padding: '12px 16px',
-              fontSize: 'var(--font-size-body-sm)',
+              padding: 'var(--spacing-input-padding)',
+              fontSize: 'var(--font-size-body-md)',
               color: 'var(--gray-900)',
               backgroundColor: 'var(--color-background-primary)',
               borderWidth: '1px',
               borderStyle: 'solid',
               borderColor: 'var(--color-border)',
-              borderRadius: '100px',
+              borderRadius: 'var(--border-radius-input)',
               outline: 'none',
               cursor: 'pointer',
             }}
@@ -416,14 +416,14 @@ const TransactionsView = () => {
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value as 'all' | TransactionStatus)}
             style={{
-              padding: '12px 16px',
-              fontSize: 'var(--font-size-body-sm)',
+              padding: 'var(--spacing-input-padding)',
+              fontSize: 'var(--font-size-body-md)',
               color: 'var(--gray-900)',
               backgroundColor: 'var(--color-background-primary)',
               borderWidth: '1px',
               borderStyle: 'solid',
               borderColor: 'var(--color-border)',
-              borderRadius: '100px',
+              borderRadius: 'var(--border-radius-input)',
               outline: 'none',
               cursor: 'pointer',
             }}

@@ -449,10 +449,10 @@ const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
                     className="w-full"
                     style={{
                       height: '56px',
-                      padding: '12px 24px',
+                      padding: 'var(--spacing-input-padding)',
                       fontSize: 'var(--font-size-body-md)',
                       color: 'var(--gray-900)',
-                      backgroundColor: '#FFFFFF',
+                      backgroundColor: 'var(--color-background-primary)',
                       borderWidth: '1px',
                       borderStyle: 'solid',
                       borderColor: errors.category ? '#ef4444' : 'var(--color-border)',
@@ -578,10 +578,10 @@ const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
                   className="w-full"
                   style={{
                     height: '56px',
-                    padding: '12px 24px',
+                    padding: 'var(--spacing-input-padding)',
                     fontSize: 'var(--font-size-body-md)',
                     color: 'var(--gray-900)',
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: 'var(--color-background-primary)',
                     borderWidth: '1px',
                     borderStyle: 'solid',
                     borderColor: 'var(--color-border)',
@@ -622,10 +622,10 @@ const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
                   className="w-full"
                   style={{
                     height: '56px',
-                    padding: '12px 24px',
+                    padding: 'var(--spacing-input-padding)',
                     fontSize: 'var(--font-size-body-md)',
                     color: 'var(--gray-900)',
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: 'var(--color-background-primary)',
                     borderWidth: '1px',
                     borderStyle: 'solid',
                     borderColor: errors.accountId ? '#ef4444' : 'var(--color-border)',
@@ -688,10 +688,10 @@ const NewTransactionModal = ({ isOpen, onClose }: NewTransactionModalProps) => {
                   className="w-full"
                   style={{
                     height: '56px',
-                    padding: '12px 24px',
+                    padding: 'var(--spacing-input-padding)',
                     fontSize: 'var(--font-size-body-md)',
                     color: isRecurring ? 'var(--color-text-secondary)' : 'var(--gray-900)',
-                    backgroundColor: isRecurring ? 'var(--gray-100)' : '#FFFFFF',
+                    backgroundColor: isRecurring ? 'var(--gray-100)' : 'var(--color-background-primary)',
                     borderWidth: '1px',
                     borderStyle: 'solid',
                     borderColor: 'var(--color-border)',

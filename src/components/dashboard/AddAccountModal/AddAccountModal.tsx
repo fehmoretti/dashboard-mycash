@@ -371,10 +371,10 @@ const AddAccountModal = ({ isOpen, onClose }: AddAccountModalProps) => {
                 className="w-full"
                 style={{
                   height: '56px',
-                  padding: '12px 24px',
+                  padding: 'var(--spacing-input-padding)',
                   fontSize: 'var(--font-size-body-md)',
                   color: 'var(--gray-900)',
-                  backgroundColor: '#FFFFFF',
+                  backgroundColor: 'var(--color-background-primary)',
                   borderWidth: '1px',
                   borderStyle: 'solid',
                   borderColor: errors.holderId ? '#ef4444' : 'var(--color-border)',

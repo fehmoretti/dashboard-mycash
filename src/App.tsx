@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { MainLayout } from './components/layout'
 import { ROUTES } from './constants'
 import { FinanceProvider } from './contexts/FinanceContext'
+import { AuthProvider } from './contexts/AuthContext'
 import CardsView from './pages/CardsView'
 import TransactionsView from './pages/TransactionsView'
 import ProfileView from './pages/ProfileView'
@@ -35,25 +36,27 @@ const Dashboard = () => {
 
       {/* Linha principal: Carrossel + Cards de Resumo à esquerda, Cartões à direita */}
       <div
-        className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch w-full"
         style={{
           gap: '16px',
           marginTop: '16px',
           alignItems: 'stretch',
+          width: '100%',
         }}
       >
         {/* Coluna esquerda (2/3): Carrossel + Cards de Resumo */}
-        <div className="lg:col-span-2 flex flex-col h-full" style={{ gap: '16px' }}>
+        <div className="lg:col-span-2 flex flex-col h-full w-full" style={{ gap: '16px', width: '100%' }}>
           {/* Carrossel de Gastos por Categoria */}
           <ExpensesByCategoryCarousel />
 
           {/* Cards de Resumo Financeiro */}
           <div
-            className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch flex-1"
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch flex-1 w-full"
             style={{
               gap: '16px',
               alignItems: 'stretch',
               flex: 1,
+              width: '100%',
             }}
           >
             {/* Todos os cards têm o mesmo tamanho (fill) */}
@@ -70,8 +73,8 @@ const Dashboard = () => {
         </div>
 
         {/* Coluna direita (1/3): Widget de Cartões */}
-        <div className="lg:col-span-1 flex h-full">
-          <div className="flex-1 w-full h-full">
+        <div className="lg:col-span-1 flex h-full w-full" style={{ width: '100%' }}>
+          <div className="flex-1 w-full h-full" style={{ width: '100%' }}>
             <CreditCardsWidget />
           </div>
         </div>
@@ -79,10 +82,11 @@ const Dashboard = () => {
 
       {/* Linha 2: Gráfico de Fluxo Financeiro e Próximas Despesas */}
       <div
-        className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+        className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full"
         style={{
           gap: '16px',
           marginTop: '16px',
+          width: '100%',
         }}
       >
         <FinancialFlowChart />
@@ -107,17 +111,19 @@ const Goals = () => (
 
 function App() {
   return (
-    <FinanceProvider>
-      <Routes>
-        <Route element={<MainLayout />}>
-          <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
-          <Route path={ROUTES.CARDS} element={<CardsView />} />
-          <Route path={ROUTES.TRANSACTIONS} element={<TransactionsView />} />
-          <Route path={ROUTES.GOALS} element={<Goals />} />
-          <Route path={ROUTES.PROFILE} element={<ProfileView />} />
-        </Route>
-      </Routes>
-    </FinanceProvider>
+    <AuthProvider>
+      <FinanceProvider>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={ROUTES.CARDS} element={<CardsView />} />
+            <Route path={ROUTES.TRANSACTIONS} element={<TransactionsView />} />
+            <Route path={ROUTES.GOALS} element={<Goals />} />
+            <Route path={ROUTES.PROFILE} element={<ProfileView />} />
+          </Route>
+        </Routes>
+      </FinanceProvider>
+    </AuthProvider>
   )
 }
 

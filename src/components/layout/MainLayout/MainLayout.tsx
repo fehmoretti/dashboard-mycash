@@ -25,14 +25,15 @@ const MainLayout = () => {
 
       {/* Conteúdo Principal */}
       <main
-        className="flex-1 transition-all duration-300 ease-in-out pt-16 lg:pt-0"
+        className="transition-all duration-300 ease-in-out pt-16 lg:pt-0"
         style={{
-          width: '100%',
+          flex: 1,
           minWidth: 0, // Permite que flex-1 funcione corretamente
           marginLeft: isExpanded ? '16rem' : '5rem', // 16rem = 256px (expanded), 5rem = 80px (collapsed)
+          width: isExpanded ? 'calc(100% - 16rem)' : 'calc(100% - 5rem)', // Largura dinâmica baseada na sidebar
         }}
       >
-        <div className="w-full h-full" style={{ width: '100%' }}>
+        <div className="w-full h-full" style={{ width: '100%', minWidth: 0 }}>
           <Outlet />
         </div>
       </main>

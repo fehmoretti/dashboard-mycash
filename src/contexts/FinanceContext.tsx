@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react'
+import React, { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react'
 import {
   Transaction,
   Goal,
@@ -15,6 +15,28 @@ import {
   mockBankAccounts,
   mockFamilyMembers,
 } from './mockData'
+import {
+  getTransactions,
+  createTransaction,
+  updateTransaction as updateTransactionService,
+  deleteTransaction as deleteTransactionService,
+} from '@/services/transactionService'
+import {
+  getCreditCards,
+  getBankAccounts,
+  createCreditCard,
+  createBankAccount,
+  updateCreditCard as updateCreditCardService,
+  updateBankAccount as updateBankAccountService,
+  deleteAccount,
+} from '@/services/accountService'
+import {
+  getFamilyMembers,
+  createFamilyMember,
+  updateFamilyMember as updateFamilyMemberService,
+  deleteFamilyMember as deleteFamilyMemberService,
+} from '@/services/familyMemberService'
+import { getUserId, isSupabaseAvailable } from '@/utils/getUserId'
 
 // Interface do contexto
 interface FinanceContextType {
@@ -90,8 +112,69 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [transactionType, setTransactionType] = useState<'all' | 'income' | 'expense'>('all')
   const [searchText, setSearchText] = useState<string>('')
 
+  // Carregar dados do Supabase ao montar o componente
+  useEffect(() => {
+    const loadData = async () => {
+      // Se Supabase não estiver disponível, usar dados mock (já inicializados)
+      if (!isSupabaseAvailable()) {
+        console.log('Supabase não configurado, usando dados mock')
+        return
+      }
+
+      const userId = await getUserId()
+      if (!userId) {
+        console.warn('Não foi possível obter user_id, usando dados mock')
+        return
+      }
+
+      try {
+        // Carregar transações
+        const { data: transactionsData, error: txnError } = await getTransactions(userId)
+        if (!txnError && transactionsData) {
+          setTransactions(transactionsData)
+        }
+
+        // Carregar cartões de crédito
+        const { data: cardsData, error: cardsError } = await getCreditCards(userId)
+        if (!cardsError && cardsData) {
+          setCreditCards(cardsData)
+        }
+
+        // Carregar contas bancárias
+        const { data: accountsData, error: accountsError } = await getBankAccounts(userId)
+        if (!accountsError && accountsData) {
+          setBankAccounts(accountsData)
+        }
+
+        // Carregar membros da família
+        const { data: membersData, error: membersError } = await getFamilyMembers(userId)
+        if (!membersError && membersData) {
+          setFamilyMembers(membersData)
+        }
+      } catch (error) {
+        console.error('Erro ao carregar dados do Supabase:', error)
+        // Manter dados mock em caso de erro
+      }
+    }
+
+    loadData()
+  }, [])
+
   // Funções CRUD - Transactions
-  const addTransaction = useCallback((transaction: Omit<Transaction, 'id' | 'date'>) => {
+  const addTransaction = useCallback(async (transaction: Omit<Transaction, 'id' | 'date'>) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      // Usar Supabase
+      const { data, error } = await createTransaction(userId, transaction)
+      if (!error && data) {
+        setTransactions((prev) => [...prev, data])
+        return
+      }
+      console.error('Erro ao criar transação no Supabase:', error)
+    }
+    
+    // Fallback para mock/local
     const newTransaction: Transaction = {
       ...transaction,
       id: `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -100,13 +183,37 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setTransactions((prev) => [...prev, newTransaction])
   }, [])
 
-  const updateTransaction = useCallback((id: string, updates: Partial<Transaction>) => {
-    setTransactions((prev) =>
-      prev.map((txn) => (txn.id === id ? { ...txn, ...updates } : txn))
-    )
+  const updateTransaction = useCallback(async (id: string, updates: Partial<Transaction>) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      // Usar Supabase
+      const { data, error } = await updateTransactionService(id, updates)
+      if (!error && data) {
+        setTransactions((prev) => prev.map((txn) => (txn.id === id ? data : txn)))
+        return
+      }
+      console.error('Erro ao atualizar transação no Supabase:', error)
+    }
+    
+    // Fallback para mock/local
+    setTransactions((prev) => prev.map((txn) => (txn.id === id ? { ...txn, ...updates } : txn)))
   }, [])
 
-  const deleteTransaction = useCallback((id: string) => {
+  const deleteTransaction = useCallback(async (id: string) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      // Usar Supabase
+      const { error } = await deleteTransactionService(id)
+      if (!error) {
+        setTransactions((prev) => prev.filter((txn) => txn.id !== id))
+        return
+      }
+      console.error('Erro ao deletar transação no Supabase:', error)
+    }
+    
+    // Fallback para mock/local
     setTransactions((prev) => prev.filter((txn) => txn.id !== id))
   }, [])
 
@@ -129,7 +236,19 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [])
 
   // Funções CRUD - CreditCards
-  const addCreditCard = useCallback((card: Omit<CreditCard, 'id' | 'createdAt'>) => {
+  const addCreditCard = useCallback(async (card: Omit<CreditCard, 'id' | 'createdAt'>) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { data, error } = await createCreditCard(userId, card)
+      if (!error && data) {
+        setCreditCards((prev) => [...prev, data])
+        return
+      }
+      console.error('Erro ao criar cartão no Supabase:', error)
+    }
+    
+    // Fallback
     const newCard: CreditCard = {
       ...card,
       id: `cc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -138,16 +257,52 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setCreditCards((prev) => [...prev, newCard])
   }, [])
 
-  const updateCreditCard = useCallback((id: string, updates: Partial<CreditCard>) => {
+  const updateCreditCard = useCallback(async (id: string, updates: Partial<CreditCard>) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { data, error } = await updateCreditCardService(id, updates)
+      if (!error && data) {
+        setCreditCards((prev) => prev.map((card) => (card.id === id ? data : card)))
+        return
+      }
+      console.error('Erro ao atualizar cartão no Supabase:', error)
+    }
+    
+    // Fallback
     setCreditCards((prev) => prev.map((card) => (card.id === id ? { ...card, ...updates } : card)))
   }, [])
 
-  const deleteCreditCard = useCallback((id: string) => {
+  const deleteCreditCard = useCallback(async (id: string) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { error } = await deleteAccount(id)
+      if (!error) {
+        setCreditCards((prev) => prev.filter((card) => card.id !== id))
+        return
+      }
+      console.error('Erro ao deletar cartão no Supabase:', error)
+    }
+    
+    // Fallback
     setCreditCards((prev) => prev.filter((card) => card.id !== id))
   }, [])
 
   // Funções CRUD - BankAccounts
-  const addBankAccount = useCallback((account: Omit<BankAccount, 'id' | 'createdAt'>) => {
+  const addBankAccount = useCallback(async (account: Omit<BankAccount, 'id' | 'createdAt'>) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { data, error } = await createBankAccount(userId, account)
+      if (!error && data) {
+        setBankAccounts((prev) => [...prev, data])
+        return
+      }
+      console.error('Erro ao criar conta no Supabase:', error)
+    }
+    
+    // Fallback
     const newAccount: BankAccount = {
       ...account,
       id: `acc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -156,18 +311,52 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setBankAccounts((prev) => [...prev, newAccount])
   }, [])
 
-  const updateBankAccount = useCallback((id: string, updates: Partial<BankAccount>) => {
-    setBankAccounts((prev) =>
-      prev.map((account) => (account.id === id ? { ...account, ...updates } : account))
-    )
+  const updateBankAccount = useCallback(async (id: string, updates: Partial<BankAccount>) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { data, error } = await updateBankAccountService(id, updates)
+      if (!error && data) {
+        setBankAccounts((prev) => prev.map((account) => (account.id === id ? data : account)))
+        return
+      }
+      console.error('Erro ao atualizar conta no Supabase:', error)
+    }
+    
+    // Fallback
+    setBankAccounts((prev) => prev.map((account) => (account.id === id ? { ...account, ...updates } : account)))
   }, [])
 
-  const deleteBankAccount = useCallback((id: string) => {
+  const deleteBankAccount = useCallback(async (id: string) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { error } = await deleteAccount(id)
+      if (!error) {
+        setBankAccounts((prev) => prev.filter((account) => account.id !== id))
+        return
+      }
+      console.error('Erro ao deletar conta no Supabase:', error)
+    }
+    
+    // Fallback
     setBankAccounts((prev) => prev.filter((account) => account.id !== id))
   }, [])
 
   // Funções CRUD - FamilyMembers
-  const addFamilyMember = useCallback((member: Omit<FamilyMember, 'id' | 'createdAt'>) => {
+  const addFamilyMember = useCallback(async (member: Omit<FamilyMember, 'id' | 'createdAt'>) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { data, error } = await createFamilyMember(userId, member)
+      if (!error && data) {
+        setFamilyMembers((prev) => [...prev, data])
+        return
+      }
+      console.error('Erro ao criar membro no Supabase:', error)
+    }
+    
+    // Fallback
     const newMember: FamilyMember = {
       ...member,
       id: `member_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -176,13 +365,35 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setFamilyMembers((prev) => [...prev, newMember])
   }, [])
 
-  const updateFamilyMember = useCallback((id: string, updates: Partial<FamilyMember>) => {
-    setFamilyMembers((prev) =>
-      prev.map((member) => (member.id === id ? { ...member, ...updates } : member))
-    )
+  const updateFamilyMember = useCallback(async (id: string, updates: Partial<FamilyMember>) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { data, error } = await updateFamilyMemberService(id, updates)
+      if (!error && data) {
+        setFamilyMembers((prev) => prev.map((member) => (member.id === id ? data : member)))
+        return
+      }
+      console.error('Erro ao atualizar membro no Supabase:', error)
+    }
+    
+    // Fallback
+    setFamilyMembers((prev) => prev.map((member) => (member.id === id ? { ...member, ...updates } : member)))
   }, [])
 
-  const deleteFamilyMember = useCallback((id: string) => {
+  const deleteFamilyMember = useCallback(async (id: string) => {
+    const userId = await getUserId()
+    
+    if (isSupabaseAvailable() && userId) {
+      const { error } = await deleteFamilyMemberService(id)
+      if (!error) {
+        setFamilyMembers((prev) => prev.filter((member) => member.id !== id))
+        return
+      }
+      console.error('Erro ao deletar membro no Supabase:', error)
+    }
+    
+    // Fallback
     setFamilyMembers((prev) => prev.filter((member) => member.id !== id))
   }, [])
 

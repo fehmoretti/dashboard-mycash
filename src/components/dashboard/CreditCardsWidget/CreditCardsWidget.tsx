@@ -148,7 +148,7 @@ const CreditCardsWidget = () => {
 
   return (
     <div
-      className="rounded-card h-full flex flex-col"
+      className="rounded-card h-full flex flex-col w-full"
       style={{
         backgroundColor: '#FFFFFF',
         padding: 'var(--spacing-container-padding)',
@@ -157,6 +157,7 @@ const CreditCardsWidget = () => {
         borderStyle: 'solid',
         borderColor: 'var(--color-border)',
         height: '100%',
+        width: '100%',
         display: 'flex',
         flexDirection: 'column',
       }}

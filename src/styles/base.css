@@ -54,6 +54,22 @@
     font-size: var(--font-size-body-md);
     color: var(--gray-900);
     background-color: var(--color-background-primary);
+    border-radius: 8px;
+    margin: 2px 0;
+  }
+
+  /* Estilização do select quando aberto/focado */
+  select:focus,
+  select:active {
+    outline: none;
+    borderColor: 'var(--color-primary)';
+  }
+
+  /* Estilização do dropdown container (webkit) */
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
   }
 
   /* Estilização do dropdown do select (webkit) */

@@ -222,7 +222,7 @@ const UpcomingExpensesWidget = () => {
 
   return (
     <div
-      className="rounded-card"
+      className="rounded-card w-full"
       style={{
         backgroundColor: 'var(--color-background-primary)',
         borderWidth: '1px',
@@ -230,6 +230,7 @@ const UpcomingExpensesWidget = () => {
         borderColor: 'var(--color-border)',
         padding: 'var(--spacing-container-padding)',
         borderRadius: 'var(--border-radius-card)',
+        width: '100%',
       }}
     >
       {/* Header */}

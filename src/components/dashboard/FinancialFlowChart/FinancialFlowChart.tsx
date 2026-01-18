@@ -88,13 +88,14 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const FinancialFlowChart = () => {
   return (
     <div
-      className="rounded-card"
+      className="rounded-card w-full"
       style={{
         backgroundColor: 'var(--color-background-primary)',
         borderWidth: '1px',
         borderStyle: 'solid',
         borderColor: 'var(--color-border)',
         padding: 'var(--spacing-container-padding)',
+        width: '100%',
       }}
     >
       {/* Header com título e legenda */}

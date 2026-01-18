@@ -161,14 +161,14 @@ const TransactionsTable = () => {
           <div
             className="relative flex items-center"
             style={{
-              width: '100%',
-              maxWidth: '256px',
+              width: '320px',
+              maxWidth: '320px',
             }}
           >
             <div
               className="absolute left-0 flex items-center justify-center"
               style={{
-                paddingLeft: 'var(--spacing-sm)',
+                paddingLeft: '24px', // Padding horizontal do input
                 pointerEvents: 'none',
               }}
             >
@@ -213,12 +213,10 @@ const TransactionsTable = () => {
           <select
             value={localTransactionType}
             onChange={(e) => setLocalTransactionType(e.target.value as 'all' | 'income' | 'expense')}
-            className="w-full sm:w-auto"
             style={{
-              width: '100%',
-              minWidth: '140px',
-              padding: '12px 24px',
-              borderRadius: '100px',
+              width: 'fit-content',
+              padding: 'var(--spacing-input-padding)', // 12px 24px
+              borderRadius: 'var(--border-radius-input)', // 100px
               borderWidth: '1px',
               borderStyle: 'solid',
               borderColor: 'var(--color-border)',
@@ -226,6 +224,12 @@ const TransactionsTable = () => {
               fontSize: 'var(--font-size-body-md)',
               color: 'var(--gray-900)',
               cursor: 'pointer',
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = 'var(--color-primary)'
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'var(--color-border)'
             }}
           >
             <option value="all">Todos</option>
@@ -237,13 +241,14 @@ const TransactionsTable = () => {
 
       {/* Tabela */}
       <div
-        className="rounded-card overflow-hidden"
+        className="rounded-card overflow-hidden w-full"
         style={{
           backgroundColor: '#FFFFFF',
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor: 'var(--color-border)',
           borderRadius: 'var(--border-radius-card)',
+          width: '100%',
         }}
       >
         {/* Header da tabela */}

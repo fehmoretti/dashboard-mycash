@@ -32,37 +32,40 @@ const Dashboard = () => {
         className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch"
         style={{
           gap: 'var(--spacing-card-gap)',
-          marginTop: 'var(--spacing-card-gap)',
+          marginTop: '16px',
+          alignItems: 'stretch',
         }}
       >
         {/* Coluna esquerda (2/3): Carrossel + Cards de Resumo */}
-        <div className="lg:col-span-2 flex flex-col" style={{ gap: 'var(--spacing-card-gap)' }}>
+        <div className="lg:col-span-2 flex flex-col h-full" style={{ gap: 'var(--spacing-card-gap)' }}>
           {/* Carrossel de Gastos por Categoria */}
           <ExpensesByCategoryCarousel />
 
           {/* Cards de Resumo Financeiro */}
           <div
-            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch flex-1"
             style={{
               gap: 'var(--spacing-card-gap)',
+              alignItems: 'stretch',
+              flex: 1,
             }}
           >
             {/* Todos os cards têm o mesmo tamanho (fill) */}
-            <div>
+            <div className="flex h-full">
               <BalanceCard />
             </div>
-            <div>
+            <div className="flex h-full">
               <IncomeCard />
             </div>
-            <div>
+            <div className="flex h-full">
               <ExpenseCard />
             </div>
           </div>
         </div>
 
         {/* Coluna direita (1/3): Widget de Cartões */}
-        <div className="lg:col-span-1 flex">
-          <div className="flex-1">
+        <div className="lg:col-span-1 flex h-full">
+          <div className="flex-1 w-full h-full">
             <CreditCardsWidget />
           </div>
         </div>
@@ -73,7 +76,7 @@ const Dashboard = () => {
         className="grid grid-cols-1 lg:grid-cols-2 gap-4"
         style={{
           gap: 'var(--spacing-card-gap)',
-          marginTop: 'var(--spacing-card-gap)',
+          marginTop: '16px',
         }}
       >
         <FinancialFlowChart />
@@ -81,7 +84,9 @@ const Dashboard = () => {
       </div>
 
       {/* Linha 4: Tabela de Transações */}
-      <TransactionsTable />
+      <div style={{ marginTop: '16px' }}>
+        <TransactionsTable />
+      </div>
     </div>
   )
 }

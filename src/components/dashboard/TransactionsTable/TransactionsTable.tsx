@@ -135,7 +135,7 @@ const TransactionsTable = () => {
   }
 
   return (
-    <div ref={tableRef} style={{ marginTop: 'var(--spacing-card-gap)' }}>
+    <div ref={tableRef} style={{ marginTop: '16px' }}>
       {/* Header com título e controles */}
       <div
         className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-4"

@@ -255,7 +255,7 @@ const TransactionsTable = () => {
             padding: 'var(--spacing-md)',
             paddingTop: 'var(--spacing-sm)',
             paddingBottom: 'var(--spacing-sm)',
-            backgroundColor: 'var(--gray-100)',
+            backgroundColor: '#FFFFFF',
             fontSize: 'var(--font-size-body-sm)',
             fontWeight: 'var(--font-weight-bold)',
             color: 'var(--gray-900)',

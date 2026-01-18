@@ -4,7 +4,17 @@ import { ROUTES } from './constants'
 import { FinanceProvider } from './contexts/FinanceContext'
 
 // Placeholder pages - serão implementadas nos próximos prompts
-import { BalanceCard, IncomeCard, ExpenseCard, ExpenseCategoriesSection } from './components/dashboard'
+import { 
+  BalanceCard, 
+  IncomeCard, 
+  ExpenseCard, 
+  ExpensesByCategoryCarousel,
+  FinancialFlowChart,
+  CreditCardsWidget,
+  UpcomingExpensesWidget,
+  TransactionsTable,
+  DashboardHeader 
+} from './components/dashboard'
 
 const Dashboard = () => {
   return (
@@ -14,28 +24,64 @@ const Dashboard = () => {
         padding: 'var(--spacing-container-padding)',
       }}
     >
-      {/* Linha 1: Cards de Categorias de Despesas */}
-      <ExpenseCategoriesSection />
+      {/* Barra de controles no topo */}
+      <DashboardHeader />
 
-      {/* Linha 2: Cards de Resumo Financeiro */}
+      {/* Linha principal: Carrossel + Cards de Resumo à esquerda, Cartões à direita */}
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch"
         style={{
           gap: 'var(--spacing-card-gap)',
           marginTop: 'var(--spacing-card-gap)',
         }}
       >
-        {/* Todos os cards têm o mesmo tamanho (fill) */}
-        <div>
-          <BalanceCard />
+        {/* Coluna esquerda (2/3): Carrossel + Cards de Resumo */}
+        <div className="lg:col-span-2 flex flex-col" style={{ gap: 'var(--spacing-card-gap)' }}>
+          {/* Carrossel de Gastos por Categoria */}
+          <ExpensesByCategoryCarousel />
+
+          {/* Cards de Resumo Financeiro */}
+          <div
+            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+            style={{
+              gap: 'var(--spacing-card-gap)',
+            }}
+          >
+            {/* Todos os cards têm o mesmo tamanho (fill) */}
+            <div>
+              <BalanceCard />
+            </div>
+            <div>
+              <IncomeCard />
+            </div>
+            <div>
+              <ExpenseCard />
+            </div>
+          </div>
         </div>
-        <div>
-          <IncomeCard />
-        </div>
-        <div>
-          <ExpenseCard />
+
+        {/* Coluna direita (1/3): Widget de Cartões */}
+        <div className="lg:col-span-1 flex">
+          <div className="flex-1">
+            <CreditCardsWidget />
+          </div>
         </div>
       </div>
+
+      {/* Linha 2: Gráfico de Fluxo Financeiro e Próximas Despesas */}
+      <div
+        className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+        style={{
+          gap: 'var(--spacing-card-gap)',
+          marginTop: 'var(--spacing-card-gap)',
+        }}
+      >
+        <FinancialFlowChart />
+        <UpcomingExpensesWidget />
+      </div>
+
+      {/* Linha 4: Tabela de Transações */}
+      <TransactionsTable />
     </div>
   )
 }

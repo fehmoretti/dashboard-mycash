@@ -29,7 +29,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
     if (!isExpanded) {
       const timeout = setTimeout(() => {
         setTooltipItem(path)
-      }, 300) // Delay de 300ms
+      }, 300) // Delay de 300ms conforme padrão de tooltip
       setTooltipTimeout(timeout)
     }
   }
@@ -54,118 +54,204 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
       `}
     >
       {/* Header com Logo */}
-      <div className="flex items-center justify-between p-4 border-b border-border">
-        <div className="flex items-center gap-3 overflow-hidden">
+      <div 
+        className="flex items-center justify-between border-b border-border"
+        style={{ padding: 'var(--spacing-container-padding)' }}
+      >
+        <div 
+          className="flex items-center overflow-hidden"
+          style={{ gap: 'var(--spacing-md)' }}
+        >
           {isExpanded ? (
-            <h1 className="text-heading-lg font-bold text-text-primary whitespace-nowrap">
+            <h1 
+              className="font-bold text-text-primary whitespace-nowrap"
+              style={{ 
+                fontSize: 'var(--font-size-heading-lg)',
+                fontWeight: 'var(--font-weight-bold)',
+              }}
+            >
               mycash+
             </h1>
           ) : (
-            <div className="w-8 h-8 bg-primary rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-sm">m+</span>
+            <div 
+              className="bg-primary rounded-md flex items-center justify-center"
+              style={{ 
+                width: 'var(--spacing-xl)',
+                height: 'var(--spacing-xl)',
+                borderRadius: 'var(--border-radius-md)',
+              }}
+            >
+              <span 
+                className="text-background-primary font-bold"
+                style={{ 
+                  fontSize: 'var(--font-size-body-sm)',
+                  fontWeight: 'var(--font-weight-bold)',
+                }}
+              >
+                m+
+              </span>
             </div>
           )}
         </div>
       </div>
 
-      {/* Botão Toggle */}
+      {/* Botão Toggle - posicionado na borda direita */}
       <button
         onClick={toggle}
         className={`
           absolute -right-3 top-16
-          w-6 h-6 rounded-full
+          rounded-full
           bg-background-primary border-2 border-border
           flex items-center justify-center
-          hover:bg-gray-50 transition-colors duration-200
+          hover:bg-gray-50
           shadow-sm z-50
         `}
+        style={{
+          width: 'var(--spacing-lg)',
+          height: 'var(--spacing-lg)',
+          borderRadius: 'var(--border-radius-full)',
+          transitionProperty: 'background-color',
+          transitionDuration: '200ms',
+        }}
         aria-label={isExpanded ? 'Colapsar sidebar' : 'Expandir sidebar'}
       >
         {isExpanded ? (
-          <ChevronLeftIcon className="w-4 h-4 text-text-secondary" />
+          <ChevronLeftIcon className="w-2 h-2 text-text-secondary" />
         ) : (
-          <ChevronRightIcon className="w-4 h-4 text-text-secondary" />
+          <ChevronRightIcon className="w-2 h-2 text-text-secondary" />
         )}
       </button>
 
       {/* Navegação */}
-      <nav className="flex-1 p-4 space-y-2">
-        {navigationItems.map((item) => {
-          const Icon = item.icon
-          const isActive = currentPath === item.path
+      <nav 
+        className="flex-1"
+        style={{ 
+          padding: 'var(--spacing-container-padding)',
+        }}
+      >
+        <div 
+          className="flex flex-col"
+          style={{ gap: 'var(--spacing-sm)' }}
+        >
+          {navigationItems.map((item) => {
+            const Icon = item.icon
+            const isActive = currentPath === item.path
 
-          return (
-            <div key={item.path} className="relative">
-              <NavLink
-                to={item.path}
-                onMouseEnter={() => handleMouseEnter(item.path)}
-                onMouseLeave={handleMouseLeave}
-                className={`
-                  flex items-center gap-3 px-3 py-2.5 rounded-button
-                  transition-all duration-200 ease-in-out
-                  group relative
-                  ${isExpanded ? 'w-full' : 'w-12 justify-center'}
-                  ${
-                    isActive
-                      ? 'bg-text-primary'
-                      : 'text-text-secondary hover:bg-gray-100'
-                  }
-                `}
-              >
-                <Icon
+            return (
+              <div key={item.path} className="relative">
+                <NavLink
+                  to={item.path}
+                  onMouseEnter={() => handleMouseEnter(item.path)}
+                  onMouseLeave={handleMouseLeave}
                   className={`
-                    w-5 h-5 flex-shrink-0 transition-colors duration-200
-                    ${isActive ? 'text-primary' : 'text-current'}
-                    ${!isExpanded && !isActive ? 'text-text-secondary' : ''}
+                    flex items-center rounded-button
+                    group relative
+                    ${isExpanded ? 'w-full' : 'w-12 justify-center'}
+                    ${
+                      isActive
+                        ? 'bg-text-primary'
+                        : 'text-text-secondary hover:bg-gray-100'
+                    }
                   `}
-                />
-                {isExpanded && (
-                  <span
-                    className={`
-                      text-body-md font-medium whitespace-nowrap
-                      ${isActive ? 'text-white' : 'text-current'}
-                    `}
+                  style={{
+                    padding: 'var(--spacing-input-padding)',
+                    borderRadius: 'var(--border-radius-button)',
+                    transitionProperty: 'all',
+                    transitionDuration: '200ms',
+                    transitionTimingFunction: 'ease-in-out',
+                    gap: 'var(--spacing-md)',
+                  }}
+                >
+                  <Icon
+                    className={`flex-shrink-0 w-6 h-6 transition-colors duration-200 ${
+                      isActive ? 'text-primary' : 'text-text-secondary'
+                    }`}
+                  />
+                  {isExpanded && (
+                    <span
+                      className="font-medium whitespace-nowrap"
+                      style={{
+                        fontSize: 'var(--font-size-body-md)',
+                        fontWeight: 'var(--font-weight-regular)',
+                        color: isActive 
+                          ? 'var(--color-background-primary)' 
+                          : 'var(--color-text-secondary)',
+                      }}
+                    >
+                      {item.label}
+                    </span>
+                  )}
+                </NavLink>
+
+                {/* Tooltip - aparece quando sidebar está colapsada */}
+                {!isExpanded && tooltipItem === item.path && (
+                  <div
+                    className="absolute left-full top-1/2 -translate-y-1/2 rounded-md whitespace-nowrap z-50 pointer-events-none animate-in fade-in slide-in-from-left-2"
+                    style={{
+                      marginLeft: 'var(--spacing-sm)',
+                      backgroundColor: 'var(--gray-900)',
+                      color: 'var(--color-background-primary)',
+                      fontSize: 'var(--font-size-body-sm)',
+                      paddingTop: 'var(--spacing-xs)',
+                      paddingBottom: 'var(--spacing-xs)',
+                      paddingLeft: 'var(--spacing-sm)',
+                      paddingRight: 'var(--spacing-sm)',
+                      borderRadius: 'var(--border-radius-md)',
+                    }}
                   >
                     {item.label}
-                  </span>
+                    <div 
+                      className="absolute right-full top-1/2 -translate-y-1/2"
+                      style={{
+                        borderWidth: 'var(--spacing-xs)',
+                        borderStyle: 'solid',
+                        borderColor: 'transparent',
+                        borderRightColor: 'var(--gray-900)',
+                      }}
+                    />
+                  </div>
                 )}
-              </NavLink>
-
-              {/* Tooltip */}
-              {!isExpanded && tooltipItem === item.path && (
-                <div
-                  className="
-                    absolute left-full ml-2 top-1/2 -translate-y-1/2
-                    bg-gray-900 text-white text-body-sm px-2 py-1.5 rounded-md
-                    whitespace-nowrap z-50 pointer-events-none
-                    animate-in fade-in slide-in-from-left-2 duration-200
-                  "
-                >
-                  {item.label}
-                  <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900" />
-                </div>
-              )}
-            </div>
-          )
-        })}
+              </div>
+            )
+          })}
+        </div>
       </nav>
 
       {/* Perfil do Usuário */}
       <div
-        className={`
-          p-4 border-t border-border
-          ${isExpanded ? 'flex items-center gap-3' : 'flex flex-col items-center'}
-        `}
+        className={`border-t border-border ${isExpanded ? 'flex items-center' : 'flex flex-col items-center'}`}
+        style={{
+          padding: 'var(--spacing-container-padding)',
+          gap: 'var(--spacing-md)',
+        }}
       >
-        <div className="w-10 h-10 rounded-avatar bg-primary flex items-center justify-center flex-shrink-0">
-          <UserIcon className="w-5 h-5 text-white" />
+        <div 
+          className="rounded-avatar bg-primary flex items-center justify-center flex-shrink-0"
+          style={{
+            width: 'var(--spacing-xl)',
+            height: 'var(--spacing-xl)',
+            borderRadius: 'var(--border-radius-avatar)',
+          }}
+        >
+          <UserIcon className="w-6 h-6 text-background-primary" />
         </div>
         {isExpanded && (
           <div className="flex-1 min-w-0">
-            <p className="text-body-md font-medium text-text-primary truncate">
+            <p 
+              className="font-medium text-text-primary truncate"
+              style={{
+                fontSize: 'var(--font-size-body-md)',
+                fontWeight: 'var(--font-weight-regular)',
+              }}
+            >
               Lucas Marte
             </p>
-            <p className="text-body-sm text-text-secondary truncate">
+            <p 
+              className="text-text-secondary truncate"
+              style={{
+                fontSize: 'var(--font-size-body-sm)',
+              }}
+            >
               lucasmarte@gmail.com
             </p>
           </div>

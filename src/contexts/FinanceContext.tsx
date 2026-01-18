@@ -8,13 +8,7 @@ import {
   DateRange,
   CategoryExpense,
 } from '@/types'
-import {
-  mockTransactions,
-  mockGoals,
-  mockCreditCards,
-  mockBankAccounts,
-  mockFamilyMembers,
-} from './mockData'
+// Imports removidos - dados agora vêm exclusivamente do Supabase
 import {
   getTransactions,
   createTransaction,
@@ -99,12 +93,12 @@ const FinanceContext = createContext<FinanceContextType | undefined>(undefined)
 
 // Provider do contexto
 export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Estados dos arrays principais (inicializados com dados mock)
-  const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions)
-  const [goals, setGoals] = useState<Goal[]>(mockGoals)
-  const [creditCards, setCreditCards] = useState<CreditCard[]>(mockCreditCards)
-  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>(mockBankAccounts)
-  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>(mockFamilyMembers)
+  // Estados dos arrays principais (inicializados vazios - dados vêm do Supabase)
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [goals, setGoals] = useState<Goal[]>([])
+  const [creditCards, setCreditCards] = useState<CreditCard[]>([])
+  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([])
+  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([])
 
   // Estados de filtros
   const [selectedMember, setSelectedMember] = useState<string | null>(null)
@@ -115,15 +109,15 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // Carregar dados do Supabase ao montar o componente
   useEffect(() => {
     const loadData = async () => {
-      // Se Supabase não estiver disponível, usar dados mock (já inicializados)
+      // Verificar se Supabase está disponível
       if (!isSupabaseAvailable()) {
-        console.log('Supabase não configurado, usando dados mock')
+        console.error('⚠️ Supabase não configurado! Configure VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY')
         return
       }
 
       const userId = await getUserId()
       if (!userId) {
-        console.warn('Não foi possível obter user_id, usando dados mock')
+        console.error('⚠️ Não foi possível obter user_id do Supabase')
         return
       }
 
@@ -132,28 +126,35 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const { data: transactionsData, error: txnError } = await getTransactions(userId)
         if (!txnError && transactionsData) {
           setTransactions(transactionsData)
+        } else if (txnError) {
+          console.error('Erro ao carregar transações:', txnError)
         }
 
         // Carregar cartões de crédito
         const { data: cardsData, error: cardsError } = await getCreditCards(userId)
         if (!cardsError && cardsData) {
           setCreditCards(cardsData)
+        } else if (cardsError) {
+          console.error('Erro ao carregar cartões:', cardsError)
         }
 
         // Carregar contas bancárias
         const { data: accountsData, error: accountsError } = await getBankAccounts(userId)
         if (!accountsError && accountsData) {
           setBankAccounts(accountsData)
+        } else if (accountsError) {
+          console.error('Erro ao carregar contas:', accountsError)
         }
 
         // Carregar membros da família
         const { data: membersData, error: membersError } = await getFamilyMembers(userId)
         if (!membersError && membersData) {
           setFamilyMembers(membersData)
+        } else if (membersError) {
+          console.error('Erro ao carregar membros:', membersError)
         }
       } catch (error) {
         console.error('Erro ao carregar dados do Supabase:', error)
-        // Manter dados mock em caso de erro
       }
     }
 
@@ -162,58 +163,69 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Funções CRUD - Transactions
   const addTransaction = useCallback(async (transaction: Omit<Transaction, 'id' | 'date'>) => {
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível criar transação.')
+      return
+    }
+
     const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      // Usar Supabase
-      const { data, error } = await createTransaction(userId, transaction)
-      if (!error && data) {
-        setTransactions((prev) => [...prev, data])
-        return
-      }
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível criar transação.')
+      return
+    }
+
+    const { data, error } = await createTransaction(userId, transaction)
+    if (error) {
       console.error('Erro ao criar transação no Supabase:', error)
+      return
     }
-    
-    // Fallback para mock/local
-    const newTransaction: Transaction = {
-      ...transaction,
-      id: `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      date: new Date(),
+
+    if (data) {
+      setTransactions((prev) => [...prev, data])
     }
-    setTransactions((prev) => [...prev, newTransaction])
   }, [])
 
   const updateTransaction = useCallback(async (id: string, updates: Partial<Transaction>) => {
-    const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      // Usar Supabase
-      const { data, error } = await updateTransactionService(id, updates)
-      if (!error && data) {
-        setTransactions((prev) => prev.map((txn) => (txn.id === id ? data : txn)))
-        return
-      }
-      console.error('Erro ao atualizar transação no Supabase:', error)
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível atualizar transação.')
+      return
     }
-    
-    // Fallback para mock/local
-    setTransactions((prev) => prev.map((txn) => (txn.id === id ? { ...txn, ...updates } : txn)))
+
+    const userId = await getUserId()
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível atualizar transação.')
+      return
+    }
+
+    const { data, error } = await updateTransactionService(id, updates)
+    if (error) {
+      console.error('Erro ao atualizar transação no Supabase:', error)
+      return
+    }
+
+    if (data) {
+      setTransactions((prev) => prev.map((txn) => (txn.id === id ? data : txn)))
+    }
   }, [])
 
   const deleteTransaction = useCallback(async (id: string) => {
-    const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      // Usar Supabase
-      const { error } = await deleteTransactionService(id)
-      if (!error) {
-        setTransactions((prev) => prev.filter((txn) => txn.id !== id))
-        return
-      }
-      console.error('Erro ao deletar transação no Supabase:', error)
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível deletar transação.')
+      return
     }
-    
-    // Fallback para mock/local
+
+    const userId = await getUserId()
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível deletar transação.')
+      return
+    }
+
+    const { error } = await deleteTransactionService(id)
+    if (error) {
+      console.error('Erro ao deletar transação no Supabase:', error)
+      return
+    }
+
     setTransactions((prev) => prev.filter((txn) => txn.id !== id))
   }, [])
 
@@ -237,163 +249,205 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Funções CRUD - CreditCards
   const addCreditCard = useCallback(async (card: Omit<CreditCard, 'id' | 'createdAt'>) => {
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível criar cartão.')
+      return
+    }
+
     const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { data, error } = await createCreditCard(userId, card)
-      if (!error && data) {
-        setCreditCards((prev) => [...prev, data])
-        return
-      }
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível criar cartão.')
+      return
+    }
+
+    const { data, error } = await createCreditCard(userId, card)
+    if (error) {
       console.error('Erro ao criar cartão no Supabase:', error)
+      return
     }
-    
-    // Fallback
-    const newCard: CreditCard = {
-      ...card,
-      id: `cc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      createdAt: new Date(),
+
+    if (data) {
+      setCreditCards((prev) => [...prev, data])
     }
-    setCreditCards((prev) => [...prev, newCard])
   }, [])
 
   const updateCreditCard = useCallback(async (id: string, updates: Partial<CreditCard>) => {
-    const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { data, error } = await updateCreditCardService(id, updates)
-      if (!error && data) {
-        setCreditCards((prev) => prev.map((card) => (card.id === id ? data : card)))
-        return
-      }
-      console.error('Erro ao atualizar cartão no Supabase:', error)
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível atualizar cartão.')
+      return
     }
-    
-    // Fallback
-    setCreditCards((prev) => prev.map((card) => (card.id === id ? { ...card, ...updates } : card)))
+
+    const userId = await getUserId()
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível atualizar cartão.')
+      return
+    }
+
+    const { data, error } = await updateCreditCardService(id, updates)
+    if (error) {
+      console.error('Erro ao atualizar cartão no Supabase:', error)
+      return
+    }
+
+    if (data) {
+      setCreditCards((prev) => prev.map((card) => (card.id === id ? data : card)))
+    }
   }, [])
 
   const deleteCreditCard = useCallback(async (id: string) => {
-    const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { error } = await deleteAccount(id)
-      if (!error) {
-        setCreditCards((prev) => prev.filter((card) => card.id !== id))
-        return
-      }
-      console.error('Erro ao deletar cartão no Supabase:', error)
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível deletar cartão.')
+      return
     }
-    
-    // Fallback
+
+    const userId = await getUserId()
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível deletar cartão.')
+      return
+    }
+
+    const { error } = await deleteAccount(id)
+    if (error) {
+      console.error('Erro ao deletar cartão no Supabase:', error)
+      return
+    }
+
     setCreditCards((prev) => prev.filter((card) => card.id !== id))
   }, [])
 
   // Funções CRUD - BankAccounts
   const addBankAccount = useCallback(async (account: Omit<BankAccount, 'id' | 'createdAt'>) => {
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível criar conta.')
+      return
+    }
+
     const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { data, error } = await createBankAccount(userId, account)
-      if (!error && data) {
-        setBankAccounts((prev) => [...prev, data])
-        return
-      }
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível criar conta.')
+      return
+    }
+
+    const { data, error } = await createBankAccount(userId, account)
+    if (error) {
       console.error('Erro ao criar conta no Supabase:', error)
+      return
     }
-    
-    // Fallback
-    const newAccount: BankAccount = {
-      ...account,
-      id: `acc_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      createdAt: new Date(),
+
+    if (data) {
+      setBankAccounts((prev) => [...prev, data])
     }
-    setBankAccounts((prev) => [...prev, newAccount])
   }, [])
 
   const updateBankAccount = useCallback(async (id: string, updates: Partial<BankAccount>) => {
-    const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { data, error } = await updateBankAccountService(id, updates)
-      if (!error && data) {
-        setBankAccounts((prev) => prev.map((account) => (account.id === id ? data : account)))
-        return
-      }
-      console.error('Erro ao atualizar conta no Supabase:', error)
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível atualizar conta.')
+      return
     }
-    
-    // Fallback
-    setBankAccounts((prev) => prev.map((account) => (account.id === id ? { ...account, ...updates } : account)))
+
+    const userId = await getUserId()
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível atualizar conta.')
+      return
+    }
+
+    const { data, error } = await updateBankAccountService(id, updates)
+    if (error) {
+      console.error('Erro ao atualizar conta no Supabase:', error)
+      return
+    }
+
+    if (data) {
+      setBankAccounts((prev) => prev.map((account) => (account.id === id ? data : account)))
+    }
   }, [])
 
   const deleteBankAccount = useCallback(async (id: string) => {
-    const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { error } = await deleteAccount(id)
-      if (!error) {
-        setBankAccounts((prev) => prev.filter((account) => account.id !== id))
-        return
-      }
-      console.error('Erro ao deletar conta no Supabase:', error)
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível deletar conta.')
+      return
     }
-    
-    // Fallback
+
+    const userId = await getUserId()
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível deletar conta.')
+      return
+    }
+
+    const { error } = await deleteAccount(id)
+    if (error) {
+      console.error('Erro ao deletar conta no Supabase:', error)
+      return
+    }
+
     setBankAccounts((prev) => prev.filter((account) => account.id !== id))
   }, [])
 
   // Funções CRUD - FamilyMembers
   const addFamilyMember = useCallback(async (member: Omit<FamilyMember, 'id' | 'createdAt'>) => {
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível criar membro.')
+      return
+    }
+
     const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { data, error } = await createFamilyMember(userId, member)
-      if (!error && data) {
-        setFamilyMembers((prev) => [...prev, data])
-        return
-      }
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível criar membro.')
+      return
+    }
+
+    const { data, error } = await createFamilyMember(userId, member)
+    if (error) {
       console.error('Erro ao criar membro no Supabase:', error)
+      return
     }
-    
-    // Fallback
-    const newMember: FamilyMember = {
-      ...member,
-      id: `member_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      createdAt: new Date(),
+
+    if (data) {
+      setFamilyMembers((prev) => [...prev, data])
     }
-    setFamilyMembers((prev) => [...prev, newMember])
   }, [])
 
   const updateFamilyMember = useCallback(async (id: string, updates: Partial<FamilyMember>) => {
-    const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { data, error } = await updateFamilyMemberService(id, updates)
-      if (!error && data) {
-        setFamilyMembers((prev) => prev.map((member) => (member.id === id ? data : member)))
-        return
-      }
-      console.error('Erro ao atualizar membro no Supabase:', error)
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível atualizar membro.')
+      return
     }
-    
-    // Fallback
-    setFamilyMembers((prev) => prev.map((member) => (member.id === id ? { ...member, ...updates } : member)))
+
+    const userId = await getUserId()
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível atualizar membro.')
+      return
+    }
+
+    const { data, error } = await updateFamilyMemberService(id, updates)
+    if (error) {
+      console.error('Erro ao atualizar membro no Supabase:', error)
+      return
+    }
+
+    if (data) {
+      setFamilyMembers((prev) => prev.map((member) => (member.id === id ? data : member)))
+    }
   }, [])
 
   const deleteFamilyMember = useCallback(async (id: string) => {
-    const userId = await getUserId()
-    
-    if (isSupabaseAvailable() && userId) {
-      const { error } = await deleteFamilyMemberService(id)
-      if (!error) {
-        setFamilyMembers((prev) => prev.filter((member) => member.id !== id))
-        return
-      }
-      console.error('Erro ao deletar membro no Supabase:', error)
+    if (!isSupabaseAvailable()) {
+      console.error('⚠️ Supabase não configurado! Não é possível deletar membro.')
+      return
     }
-    
-    // Fallback
+
+    const userId = await getUserId()
+    if (!userId) {
+      console.error('⚠️ Não foi possível obter user_id! Não é possível deletar membro.')
+      return
+    }
+
+    const { error } = await deleteFamilyMemberService(id)
+    if (error) {
+      console.error('Erro ao deletar membro no Supabase:', error)
+      return
+    }
+
     setFamilyMembers((prev) => prev.filter((member) => member.id !== id))
   }, [])
 

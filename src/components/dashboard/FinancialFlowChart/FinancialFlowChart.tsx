@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   AreaChart,
   Area,
@@ -8,17 +9,49 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { formatCurrency } from '@/utils/format'
+import { useFinance } from '@/contexts/FinanceContext'
 
-// Dados mock para 7 meses
-const mockData = [
-  { month: 'Jan', income: 8500, expense: 6200 },
-  { month: 'Fev', income: 9200, expense: 6800 },
-  { month: 'Mar', income: 8800, expense: 7500 },
-  { month: 'Abr', income: 9500, expense: 7100 },
-  { month: 'Mai', income: 10000, expense: 7800 },
-  { month: 'Jun', income: 9800, expense: 7200 },
-  { month: 'Jul', income: 10500, expense: 8000 },
-]
+// Nomes dos meses em português
+const monthNames = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+
+/**
+ * Calcula dados de fluxo financeiro dos últimos 7 meses baseado nas transações do Supabase
+ */
+const calculateFinancialFlowData = (transactions: any[]) => {
+  // Obter data atual e calcular os últimos 7 meses
+  const now = new Date()
+  const months: { month: string; monthIndex: number; year: number; income: number; expense: number }[] = []
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
+    months.push({
+      month: monthNames[date.getMonth()],
+      monthIndex: date.getMonth(),
+      year: date.getFullYear(),
+      income: 0,
+      expense: 0,
+    })
+  }
+
+  // Agrupar transações por mês e calcular totais
+  transactions.forEach((transaction) => {
+    const transactionDate = new Date(transaction.date)
+    const monthIndex = transactionDate.getMonth()
+    const year = transactionDate.getFullYear()
+
+    const monthData = months.find((m) => m.monthIndex === monthIndex && m.year === year)
+    if (monthData) {
+      if (transaction.type === 'income') {
+        monthData.income += transaction.value
+      } else if (transaction.type === 'expense') {
+        monthData.expense += transaction.value
+      }
+    }
+  })
+
+  // Retornar apenas os dados necessários para o gráfico
+  return months.map(({ month, income, expense }) => ({ month, income, expense }))
+}
 
 // Formatador para eixo Y (valores compactos: R$ 2k, R$ 4k, etc)
 const formatYAxisValue = (value: number): string => {
@@ -86,6 +119,13 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 }
 
 const FinancialFlowChart = () => {
+  const { transactions } = useFinance()
+
+  // Calcular dados do gráfico baseado nas transações do Supabase
+  const chartData = useMemo(() => {
+    return calculateFinancialFlowData(transactions)
+  }, [transactions])
+
   return (
     <div
       className="rounded-card w-full"
@@ -182,7 +222,7 @@ const FinancialFlowChart = () => {
 
       {/* Gráfico */}
       <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={mockData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+        <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
           <defs>
             {/* Gradiente para receitas (verde-limão 30% opaco -> transparente) */}
             <linearGradient id="colorIncome" x1="0" y1="0" x2="0" y2="1">

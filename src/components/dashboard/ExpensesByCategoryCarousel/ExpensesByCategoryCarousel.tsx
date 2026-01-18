@@ -97,7 +97,7 @@ const ExpensesByCategoryCarousel = () => {
     <div
       className="relative"
       style={{
-        marginBottom: 'var(--spacing-card-gap)',
+        marginBottom: '0', // Gap gerenciado pelo container pai
         width: '100%',
         overflow: 'hidden', // Esconde cards que não cabem
       }}
@@ -123,7 +123,7 @@ const ExpensesByCategoryCarousel = () => {
         ref={carouselRef}
         className="flex scrollbar-hide"
         style={{
-          gap: 'var(--spacing-card-gap)',
+          gap: '16px',
           width: '100%',
           overflowX: 'auto',
           overflowY: 'hidden',

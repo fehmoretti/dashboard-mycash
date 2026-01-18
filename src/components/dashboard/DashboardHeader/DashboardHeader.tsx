@@ -16,7 +16,7 @@ const DashboardHeader = () => {
     <header
       className="flex items-center mb-6 flex-wrap"
       style={{
-        marginBottom: 'var(--spacing-card-gap)',
+        marginBottom: '16px',
         paddingBottom: 'var(--spacing-md)',
       }}
     >

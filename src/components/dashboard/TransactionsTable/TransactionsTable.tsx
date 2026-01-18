@@ -239,6 +239,7 @@ const TransactionsTable = () => {
       <div
         className="rounded-card overflow-hidden"
         style={{
+          backgroundColor: '#FFFFFF',
           borderWidth: '1px',
           borderStyle: 'solid',
           borderColor: 'var(--color-border)',

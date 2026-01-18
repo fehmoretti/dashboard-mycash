@@ -202,7 +202,7 @@ const CreditCardsWidget = () => {
     <div
       className="rounded-card h-full flex flex-col"
       style={{
-        backgroundColor: 'var(--gray-100)',
+        backgroundColor: '#FFFFFF',
         padding: 'var(--spacing-container-padding)',
         borderRadius: 'var(--border-radius-card)',
         height: '100%',

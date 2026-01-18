@@ -47,7 +47,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
       className="fixed left-0 top-0 h-screen z-40 flex flex-col transition-all duration-300 ease-in-out"
       style={{
         width: isExpanded ? '16rem' : '5rem', // w-64 = 256px = 16rem, w-20 = 80px = 5rem
-        backgroundColor: 'var(--color-background-secondary)',
+        backgroundColor: '#FFFFFF',
         borderRightWidth: '1px',
         borderRightStyle: 'solid',
         borderRightColor: 'var(--color-border)',

@@ -9,7 +9,10 @@ const MainLayout = () => {
   const { isExpanded } = useSidebar()
 
   return (
-    <div className="flex min-h-screen bg-background-primary">
+    <div 
+      className="flex min-h-screen"
+      style={{ backgroundColor: '#F5F6F8' }}
+    >
       {/* HeaderMobile - apenas no mobile/tablet (<1024px) */}
       <div className="block lg:hidden">
         <HeaderMobile />

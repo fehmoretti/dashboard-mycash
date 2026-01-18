@@ -22,6 +22,8 @@ const Dashboard = () => {
       className="p-8"
       style={{
         padding: 'var(--spacing-container-padding)',
+        backgroundColor: '#F5F6F8',
+        minHeight: '100vh',
       }}
     >
       {/* Barra de controles no topo */}
@@ -31,13 +33,13 @@ const Dashboard = () => {
       <div
         className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch"
         style={{
-          gap: 'var(--spacing-card-gap)',
+          gap: '16px',
           marginTop: '16px',
           alignItems: 'stretch',
         }}
       >
         {/* Coluna esquerda (2/3): Carrossel + Cards de Resumo */}
-        <div className="lg:col-span-2 flex flex-col h-full" style={{ gap: 'var(--spacing-card-gap)' }}>
+        <div className="lg:col-span-2 flex flex-col h-full" style={{ gap: '16px' }}>
           {/* Carrossel de Gastos por Categoria */}
           <ExpensesByCategoryCarousel />
 
@@ -45,7 +47,7 @@ const Dashboard = () => {
           <div
             className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch flex-1"
             style={{
-              gap: 'var(--spacing-card-gap)',
+              gap: '16px',
               alignItems: 'stretch',
               flex: 1,
             }}
@@ -75,7 +77,7 @@ const Dashboard = () => {
       <div
         className="grid grid-cols-1 lg:grid-cols-2 gap-4"
         style={{
-          gap: 'var(--spacing-card-gap)',
+          gap: '16px',
           marginTop: '16px',
         }}
       >

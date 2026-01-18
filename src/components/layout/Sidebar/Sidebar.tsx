@@ -57,7 +57,8 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
       <div 
         className="flex items-center justify-between"
         style={{ 
-          padding: 'var(--spacing-container-padding)',
+          padding: isExpanded ? 'var(--spacing-container-padding)' : 'var(--spacing-container-padding)',
+          justifyContent: isExpanded ? 'space-between' : 'center',
           borderBottomWidth: '1px',
           borderBottomStyle: 'solid',
           borderBottomColor: 'var(--color-border)',
@@ -65,7 +66,11 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
       >
         <div 
           className="flex items-center overflow-hidden"
-          style={{ gap: 'var(--spacing-md)' }}
+          style={{ 
+            gap: 'var(--spacing-md)',
+            justifyContent: isExpanded ? 'flex-start' : 'center',
+            width: isExpanded ? 'auto' : '100%',
+          }}
         >
           {isExpanded ? (
             <h1 
@@ -79,24 +84,51 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
               mycash+
             </h1>
           ) : (
-            <div 
-              className="flex items-center justify-center"
-              style={{ 
-                width: 'var(--spacing-xl)',
-                height: 'var(--spacing-xl)',
-                borderRadius: 'var(--border-radius-md)',
-                backgroundColor: 'var(--color-primary)',
-              }}
-            >
-              <span 
-                className="font-bold"
+            <div className="flex flex-col items-start">
+              <h1 
+                className="font-bold whitespace-nowrap leading-none"
                 style={{ 
-                  fontSize: 'var(--font-size-body-sm)',
+                  fontSize: 'var(--font-size-heading-lg)',
                   fontWeight: 'var(--font-weight-bold)',
-                  color: 'var(--gray-0)',
+                  color: 'var(--gray-900)',
                 }}
               >
-                m+
+                My
+              </h1>
+              {/* Linha horizontal com parte vertical (L-shaped) */}
+              <div className="relative" style={{ marginTop: '4px' }}>
+                <div 
+                  style={{
+                    width: '3rem',
+                    height: '2px',
+                    backgroundColor: 'var(--gray-900)',
+                    position: 'relative',
+                  }}
+                />
+                {/* Parte vertical da linha */}
+                <div 
+                  style={{
+                    width: '2px',
+                    height: '1rem',
+                    backgroundColor: 'var(--gray-900)',
+                    position: 'absolute',
+                    right: '0',
+                    top: '0',
+                  }}
+                />
+              </div>
+              {/* cash+ abaixo e indentado */}
+              <span
+                className="font-bold whitespace-nowrap"
+                style={{
+                  fontSize: 'var(--font-size-body-md)',
+                  fontWeight: 'var(--font-weight-bold)',
+                  color: 'var(--gray-900)',
+                  marginTop: '4px',
+                  marginLeft: '0.5rem',
+                }}
+              >
+                cash+
               </span>
             </div>
           )}
@@ -143,7 +175,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
       <nav 
         className="flex-1"
         style={{ 
-          padding: 'var(--spacing-container-padding)',
+          padding: isExpanded ? 'var(--spacing-container-padding)' : 'var(--spacing-sm)',
         }}
       >
         <div 
@@ -172,13 +204,13 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                   }}
                   className="flex items-center group relative transition-all ease-in-out"
                   style={{
-                    padding: 'var(--spacing-input-padding)',
+                    padding: isExpanded ? 'var(--spacing-input-padding)' : 'var(--spacing-sm)',
                     borderRadius: 'var(--border-radius-button)',
                     transitionProperty: 'all',
                     transitionDuration: '200ms',
                     transitionTimingFunction: 'ease-in-out',
-                    gap: 'var(--spacing-md)',
-                    width: isExpanded ? '100%' : '3rem', // w-12 = 48px = 3rem
+                    gap: isExpanded ? 'var(--spacing-md)' : '0',
+                    width: isExpanded ? '100%' : '100%',
                     justifyContent: isExpanded ? 'flex-start' : 'center',
                     backgroundColor: isActive 
                       ? 'var(--color-primary)' 
@@ -243,8 +275,8 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
       <div
         className={`${isExpanded ? 'flex items-center' : 'flex flex-col items-center'}`}
         style={{
-          padding: 'var(--spacing-container-padding)',
-          gap: 'var(--spacing-md)',
+          padding: isExpanded ? 'var(--spacing-container-padding)' : 'var(--spacing-sm)',
+          gap: isExpanded ? 'var(--spacing-md)' : '0',
           borderTopWidth: '1px',
           borderTopStyle: 'solid',
           borderTopColor: 'var(--color-border)',

@@ -64,10 +64,11 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
         >
           {isExpanded ? (
             <h1 
-              className="font-bold text-text-primary whitespace-nowrap"
+              className="font-bold whitespace-nowrap"
               style={{ 
                 fontSize: 'var(--font-size-heading-lg)',
                 fontWeight: 'var(--font-weight-bold)',
+                color: 'var(--gray-900)',
               }}
             >
               mycash+
@@ -82,10 +83,11 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
               }}
             >
               <span 
-                className="text-background-primary font-bold"
+                className="font-bold"
                 style={{ 
                   fontSize: 'var(--font-size-body-sm)',
                   fontWeight: 'var(--font-weight-bold)',
+                  color: 'var(--gray-0)',
                 }}
               >
                 m+
@@ -164,7 +166,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                   <Icon
                     className="flex-shrink-0 w-6 h-6 transition-colors duration-200"
                     style={{
-                      color: 'var(--color-text-primary)',
+                      color: 'var(--gray-900)',
                     }}
                   />
                   {isExpanded && (
@@ -173,7 +175,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                       style={{
                         fontSize: 'var(--font-size-body-md)',
                         fontWeight: 'var(--font-weight-regular)',
-                        color: 'var(--color-text-primary)',
+                        color: 'var(--gray-900)',
                       }}
                     >
                       {item.label}
@@ -188,7 +190,7 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                     style={{
                       marginLeft: 'var(--spacing-sm)',
                       backgroundColor: 'var(--gray-900)',
-                      color: 'var(--color-background-primary)',
+                      color: 'var(--gray-0)',
                       fontSize: 'var(--font-size-body-sm)',
                       paddingTop: 'var(--spacing-xs)',
                       paddingBottom: 'var(--spacing-xs)',
@@ -231,15 +233,19 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
             borderRadius: 'var(--border-radius-avatar)',
           }}
         >
-          <UserIcon className="w-6 h-6 text-background-primary" />
+          <UserIcon 
+            className="w-6 h-6" 
+            style={{ color: 'var(--gray-0)' }}
+          />
         </div>
         {isExpanded && (
           <div className="flex-1 min-w-0">
             <p 
-              className="font-medium text-text-primary truncate"
+              className="font-medium truncate"
               style={{
                 fontSize: 'var(--font-size-body-md)',
                 fontWeight: 'var(--font-weight-regular)',
+                color: 'var(--gray-900)',
               }}
             >
               Lucas Marte

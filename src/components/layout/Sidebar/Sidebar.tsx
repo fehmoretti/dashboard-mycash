@@ -163,9 +163,12 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                   }}
                 >
                   <Icon
-                    className={`flex-shrink-0 w-6 h-6 transition-colors duration-200 ${
-                      isActive ? 'text-primary' : 'text-text-secondary'
-                    }`}
+                    className="flex-shrink-0 w-6 h-6 transition-colors duration-200"
+                    style={{
+                      color: isActive 
+                        ? 'var(--color-primary)' 
+                        : 'var(--color-text-secondary)',
+                    }}
                   />
                   {isExpanded && (
                     <span

@@ -1,0 +1,65 @@
+/* Design Tokens - Variables do Figma */
+
+:root {
+  /* Cores Semânticas */
+  --color-primary: #22c55e; /* Verde brilhante (verde-limão) */
+  --color-secondary: #3b82f6; /* Azul */
+  --color-danger: #ef4444; /* Vermelho */
+  --color-success: #22c55e; /* Verde (mesmo do primary) */
+  --color-text-primary: #000000; /* Preto */
+  --color-text-secondary: #6b7280; /* Cinza escuro */
+  --color-background-primary: #ffffff; /* Branco */
+  --color-background-secondary: #f9fafb; /* Cinza muito claro */
+  --color-border: #e5e7eb; /* Cinza claro */
+  --color-chart-income: #86efac; /* Verde/amarelo claro */
+  --color-chart-expense: #fca5a5; /* Vermelho/rosa claro */
+
+  /* Cores Primitivas - Escala de Cinza */
+  --gray-0: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-900: #111827; /* Preto/almost black */
+
+  /* Espaçamento Semântico */
+  --spacing-container-padding: 1rem; /* 16px */
+  --spacing-card-gap: 1.5rem; /* 24px */
+  --spacing-item-gap: 0.75rem; /* 12px */
+  --spacing-input-padding: 0.75rem 1rem; /* 12px 16px */
+
+  /* Espaçamento Primitivo (baseado em grid 4px/8px) */
+  --spacing-xs: 0.25rem; /* 4px */
+  --spacing-sm: 0.5rem; /* 8px */
+  --spacing-md: 1rem; /* 16px */
+  --spacing-lg: 1.5rem; /* 24px */
+  --spacing-xl: 3rem; /* 48px */
+
+  /* Tipografia Semântica */
+  --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-size-heading-lg: 2rem; /* 32px */
+  --font-size-heading-md: 1.5rem; /* 24px */
+  --font-size-body-lg: 1.25rem; /* 20px */
+  --font-size-body-md: 1rem; /* 16px */
+  --font-size-body-sm: 0.875rem; /* 14px */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /* Shape (Forma) Semântica */
+  --border-radius-card: 0.75rem; /* 12px */
+  --border-radius-button: 0.5rem; /* 8px */
+  --border-radius-avatar: 50%; /* Circular */
+  --border-radius-input: 0.5rem; /* 8px */
+
+  /* Shape Primitivo */
+  --border-radius-sm: 0.25rem; /* 4px */
+  --border-radius-md: 0.5rem; /* 8px */
+  --border-radius-lg: 0.75rem; /* 12px */
+  --border-radius-full: 50%; /* Circular */
+}
+
+/* Dark mode support (preparação futura) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark mode tokens serão definidos posteriormente */
+  }
+}

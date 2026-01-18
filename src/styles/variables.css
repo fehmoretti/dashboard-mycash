@@ -1,11 +1,11 @@
 /* Design Tokens - Variables do Figma */
 
 :root {
-  /* Cores Semânticas */
-  --color-primary: #22c55e; /* Verde brilhante (verde-limão) */
+  /* Cores Semânticas - Valores exatos do Figma MCP */
+  --color-primary: #dffe35; /* color/brand/500 - Verde-limão/amarelo (do Figma MCP) */
   --color-secondary: #3b82f6; /* Azul */
   --color-danger: #ef4444; /* Vermelho */
-  --color-success: #22c55e; /* Verde (mesmo do primary) */
+  --color-success: #22c55e; /* Verde */
   --color-text-primary: #000000; /* Preto */
   --color-text-secondary: #6b7280; /* Cinza escuro */
   --color-background-primary: #ffffff; /* Branco */
@@ -14,12 +14,12 @@
   --color-chart-income: #86efac; /* Verde/amarelo claro */
   --color-chart-expense: #fca5a5; /* Vermelho/rosa claro */
 
-  /* Cores Primitivas - Escala de Cinza */
-  --gray-0: #ffffff;
-  --gray-50: #f9fafb;
-  --gray-100: #f3f4f6;
-  --gray-200: #e5e7eb;
-  --gray-900: #111827; /* Preto/almost black */
+  /* Cores Primitivas - Escala de Cinza (valores exatos do Figma MCP) */
+  --gray-0: #ffffff; /* color/neutral/0 */
+  --gray-50: #f9fafb; /* color/neutral/100 (mapeado como gray-50) */
+  --gray-100: #f3f4f6; /* color/neutral/100 (mapeado como gray-100) */
+  --gray-200: #e5e7eb; /* color/neutral/200 */
+  --gray-900: #1f2937; /* color/neutral/900 - Preto/almost black (do Figma MCP) */
 
   /* Espaçamento Semântico */
   --spacing-container-padding: 1rem; /* 16px */

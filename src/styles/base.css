@@ -48,6 +48,33 @@
     font-size: inherit;
   }
 
+  /* Estilização de opções do select (limitado pelo navegador) */
+  select option {
+    padding: 12px 24px;
+    font-size: var(--font-size-body-md);
+    color: var(--gray-900);
+    background-color: var(--color-background-primary);
+  }
+
+  /* Estilização do dropdown do select (webkit) */
+  select::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  select::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+    border-radius: 4px;
+  }
+
+  select::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 4px;
+  }
+
+  select::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-200);
+  }
+
   a {
     text-decoration: none;
     color: inherit;
@@ -130,6 +157,87 @@
     }
   }
 
+  @keyframes fadeInDown {
+    from {
+      transform: translateY(-16px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* Animações de entrada para cards e componentes */
+  @keyframes fadeInSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideOutRight {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  @keyframes progressFill {
+    from {
+      width: 0%;
+    }
+  }
+
+  /* Utility classes de animação */
   .animate-in {
     animation: fade-in 0.2s ease-out;
   }
@@ -140,6 +248,62 @@
 
   .slide-in-from-left-2 {
     animation: slide-in-from-left 0.2s ease-out;
+  }
+
+  .fade-in-slide-up {
+    animation: fadeInSlideUp 0.3s ease-out;
+  }
+
+  .fade-in-scale {
+    animation: fadeInScale 0.4s ease-out;
+  }
+
+  .skeleton-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      var(--gray-200) 0%,
+      var(--gray-100) 50%,
+      var(--gray-200) 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Transições padrão para elementos interativos */
+  .transition-button {
+    transition: background-color 200ms ease-in-out;
+  }
+
+  .transition-card {
+    transition: transform 250ms ease-out, box-shadow 250ms ease-out;
+  }
+
+  .transition-avatar {
+    transition: transform 200ms ease-in-out;
+  }
+
+  .transition-input {
+    transition: border-color 200ms ease-out;
+  }
+
+  /* Estados de hover para cards clicáveis */
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Micro-interações */
+  .micro-scale:active {
+    transform: scale(1.1);
+    transition: transform 100ms ease-out;
+  }
+
+  .micro-scale-return {
+    transition: transform 100ms ease-out;
   }
 }
 

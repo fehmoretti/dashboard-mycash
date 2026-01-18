@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react'
 import FilterPopover from './FilterPopover'
+import FiltersMobileModal from '../FiltersMobileModal'
 
 const FilterButton = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
   const popoverRef = useRef<HTMLDivElement>(null)
 
@@ -27,7 +29,13 @@ const FilterButton = () => {
   }, [isOpen])
 
   const togglePopover = () => {
-    setIsOpen(!isOpen)
+    // Verificar se é mobile (width < 1024px)
+    const isMobile = window.innerWidth < 1024
+    if (isMobile) {
+      setIsMobileModalOpen(true)
+    } else {
+      setIsOpen(!isOpen)
+    }
   }
 
   return (
@@ -72,7 +80,8 @@ const FilterButton = () => {
         </div>
       )}
 
-      {/* Modal (mobile) - TODO: implementar modal fullscreen que desliza de baixo */}
+      {/* Modal (mobile) */}
+      <FiltersMobileModal isOpen={isMobileModalOpen} onClose={() => setIsMobileModalOpen(false)} />
     </div>
   )
 }

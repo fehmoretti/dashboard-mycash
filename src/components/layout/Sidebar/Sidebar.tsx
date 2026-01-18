@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { ROUTES } from '@/constants'
 import { useSidebar } from '@/hooks/useSidebar'
+import { useFinance } from '@/contexts/FinanceContext'
 import { 
   HomeIcon, 
   CreditCardIcon, 
@@ -22,8 +23,12 @@ const navigationItems = [
 
 const Sidebar = ({ currentPath }: SidebarProps) => {
   const { isExpanded, toggle } = useSidebar()
+  const { familyMembers } = useFinance()
   const [tooltipItem, setTooltipItem] = useState<string | null>(null)
   const [tooltipTimeout, setTooltipTimeout] = useState<ReturnType<typeof setTimeout> | null>(null)
+  
+  // Avatar do primeiro membro (usuário atual)
+  const currentUser = familyMembers.length > 0 ? familyMembers[0] : null
 
   const handleMouseEnter = (path: string) => {
     if (!isExpanded) {
@@ -283,18 +288,29 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
         }}
       >
         <div 
-          className="flex items-center justify-center flex-shrink-0"
+          className="flex items-center justify-center flex-shrink-0 overflow-hidden"
           style={{
             width: 'var(--spacing-xl)',
             height: 'var(--spacing-xl)',
             borderRadius: 'var(--border-radius-avatar)',
-            backgroundColor: 'var(--color-primary)',
+            backgroundColor: currentUser?.avatarUrl ? 'transparent' : 'var(--color-primary)',
           }}
         >
-          <UserIcon 
-            className="w-6 h-6" 
-            style={{ color: 'var(--gray-900)' }}
-          />
+          {currentUser?.avatarUrl ? (
+            <img
+              src={currentUser.avatarUrl}
+              alt={currentUser.name}
+              className="w-full h-full object-cover rounded-full"
+              style={{
+                borderRadius: 'var(--border-radius-avatar)',
+              }}
+            />
+          ) : (
+            <UserIcon 
+              className="w-6 h-6" 
+              style={{ color: 'var(--gray-900)' }}
+            />
+          )}
         </div>
         {isExpanded && (
           <div className="flex-1 min-w-0">

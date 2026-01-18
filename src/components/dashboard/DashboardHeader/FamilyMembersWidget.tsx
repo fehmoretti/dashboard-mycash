@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useFinance } from '@/contexts/FinanceContext'
 import { UserIcon } from '@/components/layout/Sidebar/Icons'
+import AddMemberModal from '../AddMemberModal'
 
 const FamilyMembersWidget = () => {
   const { familyMembers, selectedMember, setSelectedMember } = useFinance()
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleMemberClick = (memberId: string) => {
     if (selectedMember === memberId) {
@@ -15,8 +17,7 @@ const FamilyMembersWidget = () => {
   }
 
   const handleAddMember = () => {
-    // TODO: Abrir modal de adicionar membro
-    console.log('Abrir modal de adicionar membro')
+    setIsModalOpen(true)
   }
 
   return (
@@ -50,10 +51,21 @@ const FamilyMembersWidget = () => {
               }}
               aria-label={`Filtrar por ${member.name}`}
             >
-              <UserIcon
-                className="w-6 h-6"
-                style={{ color: 'var(--gray-900)' }}
-              />
+              {member.avatarUrl ? (
+                <img
+                  src={member.avatarUrl}
+                  alt={member.name}
+                  className="w-full h-full object-cover rounded-full"
+                  style={{
+                    borderRadius: 'var(--border-radius-avatar)',
+                  }}
+                />
+              ) : (
+                <UserIcon
+                  className="w-6 h-6"
+                  style={{ color: 'var(--gray-900)' }}
+                />
+              )}
 
               {/* Ícone de check verde no canto inferior direito quando selecionado */}
               {isSelected && (
@@ -125,6 +137,8 @@ const FamilyMembersWidget = () => {
           />
         </svg>
       </button>
+
+      <AddMemberModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   )
 }

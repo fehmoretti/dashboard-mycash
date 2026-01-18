@@ -414,8 +414,8 @@ const DatePickerCalendar = ({ dateRange, onSelect, onClose }: DatePickerCalendar
             style={{
               paddingTop: '12px',
               paddingBottom: '12px',
-              paddingLeft: '16px',
-              paddingRight: '16px',
+              paddingLeft: '24px',
+              paddingRight: '24px',
               fontSize: 'var(--font-size-body-md)',
               fontWeight: 'var(--font-weight-bold)',
               color: 'var(--gray-0)',

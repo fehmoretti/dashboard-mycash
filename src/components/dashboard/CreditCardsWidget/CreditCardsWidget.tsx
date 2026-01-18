@@ -2,43 +2,10 @@ import { useState } from 'react'
 import { useFinance } from '@/contexts/FinanceContext'
 import { CreditCard } from '@/types'
 import { formatCurrency } from '@/utils/format'
+import AddAccountModal from '../AddAccountModal'
+import CardDetailsModal from '../CardDetailsModal'
 
 const CARDS_PER_PAGE = 3
-
-// Função para obter cores do tema do cartão
-const getThemeColors = (theme: 'black' | 'lime' | 'white') => {
-  switch (theme) {
-    case 'black':
-      return {
-        background: 'var(--gray-900)',
-        iconColor: 'var(--gray-0)',
-        badgeBackground: 'var(--gray-900)',
-        badgeColor: 'var(--gray-0)',
-      }
-    case 'lime':
-      return {
-        background: 'var(--color-primary)',
-        iconColor: 'var(--gray-900)',
-        badgeBackground: 'var(--color-primary)',
-        badgeColor: 'var(--gray-900)',
-      }
-    case 'white':
-      return {
-        background: 'var(--color-background-primary)',
-        iconColor: 'var(--gray-900)',
-        badgeBackground: 'var(--gray-900)',
-        badgeColor: 'var(--gray-0)',
-        border: '1px solid var(--color-border)',
-      }
-    default:
-      return {
-        background: 'var(--gray-900)',
-        iconColor: 'var(--gray-0)',
-        badgeBackground: 'var(--gray-900)',
-        badgeColor: 'var(--gray-0)',
-      }
-  }
-}
 
 interface CreditCardItemProps {
   card: CreditCard
@@ -47,19 +14,13 @@ interface CreditCardItemProps {
 
 const CreditCardItem = ({ card, onClick }: CreditCardItemProps) => {
   const [isHovered, setIsHovered] = useState(false)
-  const themeColors = getThemeColors(card.theme)
-
-  // Calcular percentual de uso
-  const usagePercentage = card.limit > 0 
-    ? Math.round((card.currentBill / card.limit) * 100)
-    : 0
 
   return (
     <div
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="rounded-card cursor-pointer"
+      className="rounded-card cursor-pointer relative"
       style={{
         backgroundColor: 'var(--color-background-primary)',
         padding: 'var(--spacing-container-padding)',
@@ -80,6 +41,19 @@ const CreditCardItem = ({ card, onClick }: CreditCardItemProps) => {
         cursor: 'pointer',
       }}
     >
+      {/* Número do cartão no canto superior direito */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 'var(--spacing-md)',
+          right: 'var(--spacing-md)',
+          fontSize: 'var(--font-size-body-sm)',
+          fontWeight: 'var(--font-weight-regular)',
+          color: 'var(--color-text-secondary)',
+        }}
+      >
+        •••• {card.lastDigits || '0000'}
+      </div>
       {/* Zona 1: Ícone à esquerda */}
       <div
         className="flex items-center justify-center flex-shrink-0"
@@ -87,15 +61,15 @@ const CreditCardItem = ({ card, onClick }: CreditCardItemProps) => {
           width: '48px',
           height: '48px',
           borderRadius: 'var(--border-radius-card)',
-          backgroundColor: themeColors.background,
-          borderWidth: themeColors.border ? '1px' : 'none',
-          borderStyle: themeColors.border ? 'solid' : 'none',
-          borderColor: themeColors.border || 'transparent',
+          backgroundColor: 'var(--color-primary)',
+          borderWidth: 'none',
+          borderStyle: 'none',
+          borderColor: 'transparent',
         }}
       >
         <svg
           className="w-6 h-6"
-          style={{ color: themeColors.iconColor }}
+          style={{ color: 'var(--gray-900)' }}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -133,34 +107,6 @@ const CreditCardItem = ({ card, onClick }: CreditCardItemProps) => {
           {formatCurrency(card.currentBill)}
         </p>
 
-        {/* Últimos dígitos mascarados */}
-        <p
-          style={{
-            fontSize: 'var(--font-size-body-sm)',
-            fontWeight: 'var(--font-weight-regular)',
-            color: 'var(--color-text-secondary)',
-          }}
-        >
-          •••• {card.lastDigits || '0000'}
-        </p>
-      </div>
-
-      {/* Zona 3: Indicador de uso à direita */}
-      <div
-        className="flex items-center justify-center flex-shrink-0"
-        style={{
-          minWidth: '48px',
-          height: '32px',
-          paddingLeft: 'var(--spacing-sm)',
-          paddingRight: 'var(--spacing-sm)',
-          borderRadius: 'var(--border-radius-full)',
-          backgroundColor: themeColors.badgeBackground,
-          color: themeColors.badgeColor,
-          fontSize: 'var(--font-size-body-sm)',
-          fontWeight: 'var(--font-weight-bold)',
-        }}
-      >
-        {usagePercentage}%
       </div>
     </div>
   )
@@ -169,6 +115,9 @@ const CreditCardItem = ({ card, onClick }: CreditCardItemProps) => {
 const CreditCardsWidget = () => {
   const { creditCards } = useFinance()
   const [currentPage, setCurrentPage] = useState(1)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedCard, setSelectedCard] = useState<CreditCard | null>(null)
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false)
 
   // Calcular paginação
   const totalPages = Math.ceil(creditCards.length / CARDS_PER_PAGE)
@@ -177,13 +126,12 @@ const CreditCardsWidget = () => {
   const currentCards = creditCards.slice(startIndex, endIndex)
 
   const handleAddCard = () => {
-    // TODO: Abrir modal de criação de cartão
-    console.log('Abrir modal de criação de cartão')
+    setIsModalOpen(true)
   }
 
   const handleCardClick = (card: CreditCard) => {
-    // TODO: Abrir modal de detalhes do cartão
-    console.log('Abrir modal de detalhes do cartão:', card.id)
+    setSelectedCard(card)
+    setIsDetailsModalOpen(true)
   }
 
   const handlePreviousPage = () => {
@@ -290,14 +238,7 @@ const CreditCardsWidget = () => {
       </div>
 
       {/* Lista de cartões */}
-      <div 
-        style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: 'var(--spacing-md)',
-          flex: 1,
-        }}
-      >
+      <div className="flex-1 flex flex-col" style={{ gap: 'var(--spacing-md)' }}>
         {currentCards.map((card) => (
           <CreditCardItem
             key={card.id}
@@ -308,15 +249,16 @@ const CreditCardsWidget = () => {
       </div>
 
       {/* Paginação (só aparece se houver mais de 3 cartões) */}
-      {creditCards.length > CARDS_PER_PAGE && (
+      {totalPages > 1 && (
         <div
-          className="flex items-center justify-center gap-2 mt-4"
+          className="flex items-center justify-between mt-4"
           style={{
             marginTop: 'var(--spacing-md)',
-            gap: 'var(--spacing-sm)',
+            paddingTop: 'var(--spacing-md)',
+            borderTop: '1px solid var(--color-border)',
           }}
         >
-          {/* Botão Anterior */}
+          {/* Botão anterior */}
           <button
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
@@ -367,15 +309,13 @@ const CreditCardsWidget = () => {
             style={{
               fontSize: 'var(--font-size-body-sm)',
               fontWeight: 'var(--font-weight-regular)',
-              color: 'var(--gray-900)',
-              minWidth: '60px',
-              textAlign: 'center',
+              color: 'var(--color-text-secondary)',
             }}
           >
             {currentPage} / {totalPages}
           </span>
 
-          {/* Botão Próxima */}
+          {/* Botão próximo */}
           <button
             onClick={handleNextPage}
             disabled={currentPage === totalPages}
@@ -422,6 +362,16 @@ const CreditCardsWidget = () => {
           </button>
         </div>
       )}
+
+      <AddAccountModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CardDetailsModal
+        isOpen={isDetailsModalOpen}
+        card={selectedCard}
+        onClose={() => {
+          setIsDetailsModalOpen(false)
+          setSelectedCard(null)
+        }}
+      />
     </div>
   )
 }

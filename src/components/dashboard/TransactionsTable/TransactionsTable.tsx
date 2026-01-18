@@ -194,11 +194,11 @@ const TransactionsTable = () => {
               placeholder="Buscar lançamentos..."
               className="w-full"
               style={{
-                paddingTop: 'var(--spacing-sm)',
-                paddingBottom: 'var(--spacing-sm)',
-                paddingLeft: 'calc(var(--spacing-sm) + 20px + var(--spacing-xs))',
-                paddingRight: 'var(--spacing-sm)',
-                borderRadius: 'var(--border-radius-input)',
+                paddingTop: '12px',
+                paddingBottom: '12px',
+                paddingLeft: 'calc(24px + 20px + 8px)',
+                paddingRight: '24px',
+                borderRadius: '100px',
                 borderWidth: '1px',
                 borderStyle: 'solid',
                 borderColor: 'var(--color-border)',
@@ -217,8 +217,8 @@ const TransactionsTable = () => {
             style={{
               width: '100%',
               minWidth: '140px',
-              padding: 'var(--spacing-sm)',
-              borderRadius: 'var(--border-radius-input)',
+              padding: '12px 24px',
+              borderRadius: '100px',
               borderWidth: '1px',
               borderStyle: 'solid',
               borderColor: 'var(--color-border)',
@@ -325,11 +325,12 @@ const TransactionsTable = () => {
                       <img
                         src={memberAvatar}
                         alt=""
-                        className="rounded-full"
+                        className="w-full h-full object-cover rounded-full"
                         style={{
                           width: '24px',
                           height: '24px',
                           borderRadius: 'var(--border-radius-avatar)',
+                          objectFit: 'cover',
                         }}
                       />
                     ) : (

@@ -2,13 +2,6 @@ import { useState, useRef, useEffect } from 'react'
 import { useFinance } from '@/contexts/FinanceContext'
 import CategoryDonutCard from '../CategoryDonutCard/CategoryDonutCard'
 
-// Array de cores rotativas para os donuts
-const COLORS = [
-  'var(--color-primary)', // Verde-limão
-  'var(--gray-900)', // Preto
-  'var(--color-text-secondary)', // Cinza médio
-]
-
 const ExpensesByCategoryCarousel = () => {
   const { calculateExpensesByCategory } = useFinance()
   const categoryExpenses = calculateExpensesByCategory()
@@ -139,7 +132,7 @@ const ExpensesByCategoryCarousel = () => {
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove}
       >
-        {categoryExpenses.map((categoryExpense, index) => (
+        {categoryExpenses.map((categoryExpense) => (
           <div 
             key={categoryExpense.category} 
             style={{ 
@@ -150,7 +143,7 @@ const ExpensesByCategoryCarousel = () => {
           >
             <CategoryDonutCard
               categoryExpense={categoryExpense}
-              color={COLORS[index % COLORS.length]}
+              color="var(--color-primary)"
             />
           </div>
         ))}

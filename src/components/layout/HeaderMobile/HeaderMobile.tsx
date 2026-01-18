@@ -1,11 +1,16 @@
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useFinance } from '@/contexts/FinanceContext'
 import { UserIcon } from '../Sidebar/Icons'
 import MenuDropdown from './MenuDropdown'
 
 const HeaderMobile = () => {
   const location = useLocation()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { familyMembers } = useFinance()
+  
+  // Avatar do primeiro membro (usuário atual)
+  const currentUser = familyMembers.length > 0 ? familyMembers[0] : null
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -44,20 +49,31 @@ const HeaderMobile = () => {
         {/* Avatar clicável */}
         <button
           onClick={toggleMenu}
-          className="flex items-center justify-center flex-shrink-0"
+          className="flex items-center justify-center flex-shrink-0 overflow-hidden"
           style={{
             width: 'var(--spacing-xl)',
             height: 'var(--spacing-xl)',
             borderRadius: 'var(--border-radius-avatar)',
-            backgroundColor: 'var(--color-primary)',
+            backgroundColor: currentUser?.avatarUrl ? 'transparent' : 'var(--color-primary)',
             cursor: 'pointer',
           }}
           aria-label="Abrir menu"
         >
-          <UserIcon
-            className="w-6 h-6"
-            style={{ color: 'var(--gray-900)' }}
-          />
+          {currentUser?.avatarUrl ? (
+            <img
+              src={currentUser.avatarUrl}
+              alt={currentUser.name}
+              className="w-full h-full object-cover rounded-full"
+              style={{
+                borderRadius: 'var(--border-radius-avatar)',
+              }}
+            />
+          ) : (
+            <UserIcon
+              className="w-6 h-6"
+              style={{ color: 'var(--gray-900)' }}
+            />
+          )}
         </button>
       </header>
 

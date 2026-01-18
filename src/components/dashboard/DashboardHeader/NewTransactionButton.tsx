@@ -1,10 +1,15 @@
+import { useState } from 'react'
+import NewTransactionModal from '../NewTransactionModal'
+
 const NewTransactionButton = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
   const handleClick = () => {
-    // TODO: Abrir modal de nova transação
-    console.log('Abrir modal de nova transação')
+    setIsModalOpen(true)
   }
 
   return (
+    <>
     <button
       onClick={handleClick}
       className="flex items-center justify-center rounded-full font-bold lg:w-auto w-full"
@@ -51,6 +56,8 @@ const NewTransactionButton = () => {
       </svg>
       <span className="hidden lg:inline">Nova transação</span>
     </button>
+      <NewTransactionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </>
   )
 }
 

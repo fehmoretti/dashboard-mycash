@@ -22,7 +22,7 @@ export const mockFamilyMembers: FamilyMember[] = [
     id: generateId('member'),
     name: 'Lucas Marte',
     role: 'Pai',
-    avatarUrl: undefined,
+    avatarUrl: 'https://i.pravatar.cc/150?img=12', // Avatar real de homem adulto
     monthlyIncome: 8500,
     createdAt: new Date('2024-01-01'),
   },
@@ -30,7 +30,7 @@ export const mockFamilyMembers: FamilyMember[] = [
     id: generateId('member'),
     name: 'Ana Marte',
     role: 'Mãe',
-    avatarUrl: undefined,
+    avatarUrl: 'https://i.pravatar.cc/150?img=47', // Avatar real de mulher adulta
     monthlyIncome: 6500,
     createdAt: new Date('2024-01-01'),
   },
@@ -38,7 +38,7 @@ export const mockFamilyMembers: FamilyMember[] = [
     id: generateId('member'),
     name: 'Pedro Marte',
     role: 'Filho',
-    avatarUrl: undefined,
+    avatarUrl: 'https://i.pravatar.cc/150?img=33', // Avatar real de jovem
     monthlyIncome: undefined,
     createdAt: new Date('2024-01-01'),
   },

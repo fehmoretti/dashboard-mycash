@@ -2,6 +2,9 @@ import { Routes, Route } from 'react-router-dom'
 import { MainLayout } from './components/layout'
 import { ROUTES } from './constants'
 import { FinanceProvider } from './contexts/FinanceContext'
+import CardsView from './pages/CardsView'
+import TransactionsView from './pages/TransactionsView'
+import ProfileView from './pages/ProfileView'
 
 // Placeholder pages - serão implementadas nos próximos prompts
 import { 
@@ -19,11 +22,12 @@ import {
 const Dashboard = () => {
   return (
     <div
-      className="p-8"
+      className="px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8 w-full"
       style={{
-        padding: 'var(--spacing-container-padding)',
         backgroundColor: '#F5F6F8',
         minHeight: '100vh',
+        width: '100%',
+        overflowX: 'hidden',
       }}
     >
       {/* Barra de controles no topo */}
@@ -92,36 +96,12 @@ const Dashboard = () => {
     </div>
   )
 }
-const Cards = () => (
-  <div className="p-8">
-    <h1 className="text-heading-lg font-bold text-text-primary mb-4">
-      Cartões
-    </h1>
-    <p className="text-text-secondary">Cartões em construção</p>
-  </div>
-)
-const Transactions = () => (
-  <div className="p-8">
-    <h1 className="text-heading-lg font-bold text-text-primary mb-4">
-      Transações
-    </h1>
-    <p className="text-text-secondary">Transações em construção</p>
-  </div>
-)
 const Goals = () => (
-  <div className="p-8">
+  <div className="px-4 md:px-6 lg:px-8 py-4 md:py-6 lg:py-8 w-full">
     <h1 className="text-heading-lg font-bold text-text-primary mb-4">
       Objetivos
     </h1>
     <p className="text-text-secondary">Objetivos em construção</p>
-  </div>
-)
-const Profile = () => (
-  <div className="p-8">
-    <h1 className="text-heading-lg font-bold text-text-primary mb-4">
-      Perfil
-    </h1>
-    <p className="text-text-secondary">Perfil em construção</p>
   </div>
 )
 
@@ -131,10 +111,10 @@ function App() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
-          <Route path={ROUTES.CARDS} element={<Cards />} />
-          <Route path={ROUTES.TRANSACTIONS} element={<Transactions />} />
+          <Route path={ROUTES.CARDS} element={<CardsView />} />
+          <Route path={ROUTES.TRANSACTIONS} element={<TransactionsView />} />
           <Route path={ROUTES.GOALS} element={<Goals />} />
-          <Route path={ROUTES.PROFILE} element={<Profile />} />
+          <Route path={ROUTES.PROFILE} element={<ProfileView />} />
         </Route>
       </Routes>
     </FinanceProvider>

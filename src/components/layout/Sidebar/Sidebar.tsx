@@ -107,20 +107,25 @@ const Sidebar = ({ currentPath }: SidebarProps) => {
                   ${isExpanded ? 'w-full' : 'w-12 justify-center'}
                   ${
                     isActive
-                      ? 'bg-text-primary text-white'
+                      ? 'bg-text-primary'
                       : 'text-text-secondary hover:bg-gray-100'
                   }
                 `}
               >
                 <Icon
                   className={`
-                    flex-shrink-0 transition-colors duration-200
+                    w-5 h-5 flex-shrink-0 transition-colors duration-200
                     ${isActive ? 'text-primary' : 'text-current'}
                     ${!isExpanded && !isActive ? 'text-text-secondary' : ''}
                   `}
                 />
                 {isExpanded && (
-                  <span className="text-body-md font-medium whitespace-nowrap">
+                  <span
+                    className={`
+                      text-body-md font-medium whitespace-nowrap
+                      ${isActive ? 'text-white' : 'text-current'}
+                    `}
+                  >
                     {item.label}
                   </span>
                 )}

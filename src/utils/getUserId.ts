@@ -23,7 +23,7 @@ export const getUserId = async (): Promise<string | null> => {
 
   try {
     // Tentar obter sessão atual
-    const { data: { session }, error } = await supabase.auth.getSession()
+    const { data: { session } } = await supabase.auth.getSession()
     
     // Se houver sessão, usar o user_id real
     if (session?.user?.id) {
